@@ -11,6 +11,13 @@ Author URI: https://mytory.net
 class MytoryMarkdownForDropbox
 {
     public $version = '1.0.0';
+    public $authKeys = array(
+        'access_token',
+        'account_id',
+        'state',
+        'token_type',
+        'uid',
+    );
 
     function __construct()
     {
@@ -20,7 +27,8 @@ class MytoryMarkdownForDropbox
         add_action('wp_ajax_mm4d_convert_from_dropbox', array($this, 'convertFromDropbox'));
         add_action('admin_menu', array($this, 'addMenu'));
         add_action('admin_init', array($this, 'registerSettings'));
-        add_action('admin_enqueue_scripts', array($this, 'enqueueScripts'));
+        add_action('admin_enqueue_scripts', array($this, 'adminEnqueueScripts'));
+        add_action('wp_ajax_mm4d_verify_state_nonce', array($this, 'verifyStateNonce'));
     }
 
     function init()
@@ -28,10 +36,14 @@ class MytoryMarkdownForDropbox
         load_plugin_textdomain('mm4d', false, dirname(plugin_basename(__FILE__)) . '/lang');
     }
 
-    function enqueueScripts()
+    function adminEnqueueScripts($hook)
     {
+        if (!in_array($hook, array('post.php', 'post-new.php', 'settings_page_mm4d'))) {
+            return;
+        }
         wp_enqueue_script('dropbox-sdk', 'https://unpkg.com/dropbox/dist/Dropbox-sdk.min.js', array(), null, true);
-        wp_enqueue_script('mm4d-script', plugins_url('js/script.js', __FILE__), array('dropbox-sdk'), $this->version, true);
+        wp_enqueue_script('mm4d-script', plugins_url('js/script.js', __FILE__), array('dropbox-sdk', 'underscore'),
+            $this->version, true);
     }
 
     function metaBox()
@@ -80,13 +92,50 @@ class MytoryMarkdownForDropbox
         if (!current_user_can('activate_plugins')) {
             return null;
         }
-        register_setting('mm4d', 'api_key');
-        register_setting('mm4d', 'secret_key');
+        register_setting('mm4d', 'app_key');
+        register_setting('mm4d', 'app_secret');
+        register_setting('mm4d', 'access_token');
+        foreach ($this->authKeys as $key) {
+            if ($key === 'state') { continue; }
+            register_setting('mm4d', $key);
+        }
+
     }
 
     function printSettingsPage()
     {
+        $secret_key = get_option('secret_key');
+        $app_key = get_option('app_key');
+        $access_token = get_option('access_token');
         include 'settings.php';
+    }
+
+    /**
+     * verify 'state' from Dropbox. This is nonce of Dropbox.
+     */
+    function verifyStateNonce()
+    {
+        if (!wp_verify_nonce($_POST['state'], '_dropbox_auth')) {
+            echo 'fail';
+        } else {
+            echo 'pass';
+        }
+        die();
+    }
+
+    /**
+     * @return bool
+     */
+    private function hasAuthKeys()
+    {
+        $hasAuthKeys = true;
+
+        foreach ($this->authKeys as $key) {
+            if (empty($_POST[$key])) {
+                $hasAuthKeys = false;
+            }
+        }
+        return $hasAuthKeys;
     }
 
 }
