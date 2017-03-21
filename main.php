@@ -22,6 +22,7 @@ class MytoryMarkdownForDropbox
         'status' => false,
         'msg' => '',
     );
+    private $markdown;
 
 
     function __construct()
@@ -35,6 +36,7 @@ class MytoryMarkdownForDropbox
         add_action('wp_ajax_mm4d_verify_state_nonce', array($this, 'verifyStateNonce'));
         add_action('wp_ajax_mm4d_get_converted_content', array($this, 'getConvertedContent'));
         register_activation_hook(__FILE__, array($this, 'activate'));
+        $this->initMarkdown();
     }
 
     function init()
@@ -140,7 +142,7 @@ class MytoryMarkdownForDropbox
     {
         $id = $_POST['id'];
         $response = array();
-        $response['content'] = $this->getFile($id);
+        $response['content'] = $this->markdown->convert($this->getFileContent($id));
         echo json_encode($response);
         die();
     }
@@ -150,7 +152,7 @@ class MytoryMarkdownForDropbox
      * @param  string $path file path or id or rev
      * @return string
      */
-    private function getFile($path)
+    private function getFileContent($path)
     {
         $curl = curl_init();
         curl_setopt($curl, CURLOPT_URL, 'https://content.dropboxapi.com/2/files/download');
@@ -195,37 +197,26 @@ class MytoryMarkdownForDropbox
         return true;
     }
 
-    /**
-     * @return bool
-     */
-    private function hasAuthKeys()
-    {
-        $hasAuthKeys = true;
-
-        foreach ($this->authKeys as $key) {
-            if (empty($_POST[$key])) {
-                $hasAuthKeys = false;
-            }
-        }
-        return $hasAuthKeys;
-    }
-
     private function initMarkdown()
     {
-//        if (phpversion() >= '5.3') {
-//            include 'Parsedown.php';
-//        } else {
-//            include 'markdown.php';
-//        }
+        switch (get_option('markdown_engine')) {
+            case 'parsedown':
+                include 'MM4DParsedown.php';
+                $this->markdown = new MM4DParsedown;
+                break;
+            case 'markdownExtra':
+                include 'MM4DMarkdownExtra.php';
+                $this->markdown = new MM4DMarkdownExtra;
+                break;
+            default:
+                $this->markdown = new MM4DMarkdownExtra;
+                // pass through
+        }
     }
 
     private function convert($md_content)
     {
-//        $content = Markdown($md_content);
-//
-//        $Parsedown = new Parsedown();
-//
-//        echo $Parsedown->text('Hello _Parsedown_!'); # prints: <p>Hello <em>Parsedown</em>!</p>
+        return $this->markdown->convert($md_content);
     }
 
 }
