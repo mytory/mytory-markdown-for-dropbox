@@ -1,54 +1,70 @@
 jQuery(function ($) {
-    if (window.location.hash) {
-        var pairs = window.location.hash.substr(1).split('&');
-        var result = {};
-        _.forEach(pairs, function (pair) {
-            pair = pair.split('=');
-            result[pair[0]] = decodeURIComponent(pair[1] || '');
+    function initRemoveSettings() {
+        $('.js-remove-settings').click(function () {
+            $('.js-mm4d-input').each(function (i, el) {
+                $(el).val('');
+            });
+            $('#mm4d-form').submit();
         });
+    }
 
-        var requiredKeys = [
-            'access_token',
-            'account_id',
-            'state',
-            'token_type',
-            'uid'
-        ];
-
-        var validationResult = _.every(requiredKeys, function (key) {
-            return _.has(result, key);
-        });
-
-        var $form = $('#mm4d-form');
-
-        if (!validationResult) {
-            alert('Error code 1');
-        } else {
-            _.each(result, function (value, key) {
-                if (key === 'state') { return true; } // state is nonce
-                var selector = '[name="{{key}}"]'.replace('{{key}}', key);
-                $(selector).val(value);
+    function completeAuth() {
+        if (window.location.hash) {
+            var pairs = window.location.hash.substr(1).split('&');
+            var result = {};
+            _.forEach(pairs, function (pair) {
+                pair = pair.split('=');
+                result[pair[0]] = decodeURIComponent(pair[1] || '');
             });
 
-            $form.hide();
+            var requiredKeys = [
+                'access_token',
+                'account_id',
+                'state',
+                'token_type',
+                'uid'
+            ];
 
-            $.post(ajaxurl, {
-                'action': 'mm4d_verify_state_nonce',
-                'state': result.state
-            }, function (response) {
-                $form.stop().fadeIn();
-                if (response == 'fail') {
-                    alert('Error code 2');
-                    $form[0].reset();
-                } else if (response == 'pass') {
-                    alert('Success! It will save form.');
-                    $form.submit();
-                } else {
-                    alert('Error code 3');
-                    $form[0].reset();
-                }
-
+            var validationResult = _.every(requiredKeys, function (key) {
+                return _.has(result, key);
             });
+
+            var $form = $('#mm4d-form');
+
+            if (!validationResult) {
+                alert('Error code 1');
+            } else {
+                _.each(result, function (value, key) {
+                    if (key === 'state') {
+                        return true;
+                    } // state is nonce
+                    var selector = '[name="{{key}}"]'.replace('{{key}}', key);
+                    $(selector).val(value);
+                });
+
+                $form.hide();
+
+                $.post(ajaxurl, {
+                    'action': 'mm4d_verify_state_nonce',
+                    'state': result.state
+                }, function (response) {
+                    $form.stop().fadeIn();
+                    if (response == 'fail') {
+                        alert('Error code 2');
+                        $form[0].reset();
+                    } else if (response == 'pass') {
+                        alert('Success! It will save form.');
+                        $form.submit();
+                    } else {
+                        alert('Error code 3');
+                        $form[0].reset();
+                    }
+
+                });
+            }
         }
     }
+
+    completeAuth();
+    initRemoveSettings();
 });
