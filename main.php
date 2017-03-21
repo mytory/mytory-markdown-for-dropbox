@@ -34,12 +34,23 @@ class MytoryMarkdownForDropbox
         add_action('admin_enqueue_scripts', array($this, 'adminEnqueueScripts'));
         add_action('wp_ajax_mm4d_verify_state_nonce', array($this, 'verifyStateNonce'));
         add_action('wp_ajax_mm4d_get_converted_content', array($this, 'getConvertedContent'));
+        register_activation_hook(__FILE__, array($this, 'activate'));
     }
 
     function init()
     {
         load_plugin_textdomain('mm4d', false, dirname(plugin_basename(__FILE__)) . '/lang');
     }
+
+    function activate()
+    {
+        if (phpversion() >= '5.3') {
+            update_option('markdown_engine', 'parsedown');
+        } else {
+            update_option('markdown_engine', 'markdownExtra');
+        }
+    }
+
 
     function adminEnqueueScripts($hook)
     {
@@ -95,13 +106,13 @@ class MytoryMarkdownForDropbox
         register_setting('mm4d', 'app_key');
         register_setting('mm4d', 'app_secret');
         register_setting('mm4d', 'access_token');
+        register_setting('mm4d', 'markdown_engine');
         foreach ($this->authKeys as $key) {
             if ($key === 'state') {
                 continue;
             }
             register_setting('mm4d', $key);
         }
-
     }
 
     function printSettingsPage()
@@ -197,6 +208,24 @@ class MytoryMarkdownForDropbox
             }
         }
         return $hasAuthKeys;
+    }
+
+    private function initMarkdown()
+    {
+//        if (phpversion() >= '5.3') {
+//            include 'Parsedown.php';
+//        } else {
+//            include 'markdown.php';
+//        }
+    }
+
+    private function convert($md_content)
+    {
+//        $content = Markdown($md_content);
+//
+//        $Parsedown = new Parsedown();
+//
+//        echo $Parsedown->text('Hello _Parsedown_!'); # prints: <p>Hello <em>Parsedown</em>!</p>
     }
 
 }
