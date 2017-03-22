@@ -259,4 +259,4 @@ class MytoryMarkdownForDropbox
 
 }
 
-$mytoryMarkdownForDropbox = new MytoryMarkdownForDropbox;
+new MytoryMarkdownForDropbox;
