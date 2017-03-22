@@ -20,6 +20,13 @@ class MytoryMarkdownForDropbox
         'msg' => '',
         'is_error' => false,
     );
+    public $optionKeys = array(
+        'access_token',
+        'token_type',
+        'uid',
+        'account_id',
+        'markdown_engine',
+    );
     private $markdown;
 
     function __construct()
@@ -92,15 +99,13 @@ class MytoryMarkdownForDropbox
 
     function registerSettings()
     {
-        // whitelist options
         if (!current_user_can('activate_plugins')) {
             return null;
         }
-        register_setting('mm4d', 'access_token');
-        register_setting('mm4d', 'token_type');
-        register_setting('mm4d', 'uid');
-        register_setting('mm4d', 'account_id');
-        register_setting('mm4d', 'markdown_engine');
+
+        foreach ($this->optionKeys as $key) {
+            register_setting('mm4d', $key);
+        }
     }
 
     function printSettingsPage()
