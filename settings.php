@@ -37,15 +37,16 @@ $is_legacy_php = (phpversion() < '5.3');
             <?php } ?>
         </p>
 
-        <table class="form-table">
-            <tr valign="top">
-                <th scope="row">Code</th>
-                <td>
-                    <input type="text" class="js-mm4d-input  large-text" name="code"
-                           value="<?= get_option('code') ?>" title="code">
-                </td>
-            </tr>
-        </table>
+        <?php if (!get_option('access_token')) { ?>
+            <table class="form-table">
+                <tr valign="top">
+                    <th scope="row">Code</th>
+                    <td>
+                        <input type="text" class="js-mm4d-input  large-text" name="code" title="code">
+                    </td>
+                </tr>
+            </table>
+        <?php } ?>
 
         <table class="form-table">
             <tr valign="top">
@@ -89,8 +90,5 @@ $is_legacy_php = (phpversion() < '5.3');
         <?php
         submit_button(null, 'primary', '');
         ?>
-        <p style="text-align: right;">
-            <button type="button" class="js-remove-settings  button"><?php _e('Remove Settings', 'mm4d') ?></button>
-        </p>
     </form>
 </div>

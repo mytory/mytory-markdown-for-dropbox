@@ -100,7 +100,6 @@ class MytoryMarkdownForDropbox
         register_setting('mm4d', 'token_type');
         register_setting('mm4d', 'uid');
         register_setting('mm4d', 'account_id');
-        register_setting('mm4d', 'code');
         register_setting('mm4d', 'markdown_engine');
     }
 
