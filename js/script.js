@@ -10,6 +10,23 @@
 jQuery(function ($) {
     var dropbox;
 
+    function initRevoke() {
+        $('.js-mm4d-revoke').click(function () {
+            if (!confirm('Really?')) {
+                return false;
+            }
+            $.post(ajaxurl, {
+                'action': 'mm4d_revoke'
+            }, function (response) {
+                if (response.is_error) {
+                    alert(response.msg);
+                } else {
+                    location.reload();
+                }
+            }, 'json');
+        });
+    }
+
     function initDropbox() {
         var accessToken = $('#mm4d-access-token').val();
         if (accessToken) {
@@ -76,6 +93,7 @@ jQuery(function ($) {
         }, 'json');
     }
 
+    initRevoke();
     initDropbox();
     initFirstOpen();
 });

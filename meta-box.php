@@ -8,7 +8,7 @@
     }
 </style>
 
-<input type="hidden" id="mm4d-access-token" value="<?= get_option('access_token') ?>">
+<input type="hidden" id="mm4d-access-token" value="<?= get_option('mm4d_access_token') ?>">
 
 <table class="form-table">
     <tr>

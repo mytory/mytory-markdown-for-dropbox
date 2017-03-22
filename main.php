@@ -26,6 +26,7 @@ class MytoryMarkdownForDropbox
         'uid',
         'account_id',
         'markdown_engine',
+        'code',
     );
     private $markdown;
 
@@ -36,10 +37,11 @@ class MytoryMarkdownForDropbox
         add_action('admin_menu', array($this, 'addMenu'));
         add_action('admin_init', array($this, 'registerSettings'));
         add_action('admin_enqueue_scripts', array($this, 'adminEnqueueScripts'));
-        add_action('wp_ajax_mm4d_verify_state_nonce', array($this, 'verifyStateNonce'));
         add_action('wp_ajax_mm4d_get_converted_content', array($this, 'getConvertedContent'));
+        add_action('wp_ajax_mm4d_revoke', array($this, 'revoke'));
         register_activation_hook(__FILE__, array($this, 'activate'));
-        $this->initMarkdown();
+        $this->setDefaultMarkdownEngine();
+        $this->initMarkdownObject();
     }
 
     function init()
@@ -49,13 +51,28 @@ class MytoryMarkdownForDropbox
 
     function activate()
     {
-        if (phpversion() >= '5.3') {
-            update_option('markdown_engine', 'parsedown');
-        } else {
-            update_option('markdown_engine', 'markdownExtra');
-        }
+        $this->setDefaultMarkdownEngine();
     }
 
+    function revoke()
+    {
+        $response = $this->accessDropbox('https://api.dropboxapi.com/2/auth/token/revoke', array(
+            'Content-Type: application/json; charset=utf-8',
+        ));
+
+        if ($this->error['is_error']) {
+            $this->error['response'] = $response;
+            echo json_encode($this->error);
+        } else {
+            foreach ($this->optionKeys as $key) {
+                delete_option('mm4d_' . $key);
+            }
+            echo json_encode(array(
+                'result' => 'success',
+            ));
+        }
+        die();
+    }
 
     function adminEnqueueScripts($hook)
     {
@@ -104,25 +121,24 @@ class MytoryMarkdownForDropbox
         }
 
         foreach ($this->optionKeys as $key) {
-            register_setting('mm4d', $key);
+            register_setting('mm4d', 'mm4d_' . $key);
         }
     }
 
     function printSettingsPage()
     {
-        $access_token = get_option('access_token');
-        $code = get_option('code');
+        $access_token = get_option('mm4d_access_token');
 
-        if ($code and !$access_token) {
+        if (get_option('mm4d_code') && !$access_token) {
             $response = json_decode($this->getAccessTokenByCode());
             if ($this->error['is_error']) {
                 $message = __('The code is invalid. ', 'mm4d') . $this->error['msg'];
                 $message .= '<br>' . print_r($response, true);
             } else {
-                update_option('access_token', $response->access_token);
-                update_option('token_type', $response->token_type);
-                update_option('uid', $response->uid);
-                update_option('account_id', $response->account_id);
+                update_option('mm4d_access_token', $response->access_token);
+                update_option('mm4d_token_type', $response->token_type);
+                update_option('mm4d_uid', $response->uid);
+                update_option('mm4d_account_id', $response->account_id);
             }
         }
 
@@ -156,7 +172,7 @@ class MytoryMarkdownForDropbox
             )),
         );
 
-        $content = $this->accessDropbox($endpoint, array(), $custom_header);
+        $content = $this->accessDropbox($endpoint, $custom_header);
 
         return $content;
     }
@@ -180,9 +196,9 @@ class MytoryMarkdownForDropbox
         return true;
     }
 
-    private function initMarkdown()
+    private function initMarkdownObject()
     {
-        switch (get_option('markdown_engine')) {
+        switch (get_option('mm4d_markdown_engine')) {
             case 'parsedown':
                 include 'MM4DParsedown.php';
                 $this->markdown = new MM4DParsedown;
@@ -206,10 +222,10 @@ class MytoryMarkdownForDropbox
     private function getAccessTokenByCode()
     {
         $response = $this->accessDropbox('https://api.dropboxapi.com/oauth2/token', array(
-            'code' => get_option('code'),
-            'grant_type' => 'authorization_code',
-        ), array(
             'Content-Type: application/x-www-form-urlencoded'
+        ), array(
+            'code' => get_option('mm4d_code'),
+            'grant_type' => 'authorization_code',
         ), array(
             CURLOPT_USERPWD => MYTORY_MARKDOWN_APP_KEY . ':' . MYTORY_MARKDOWN_APP_SECRET,
             CURLOPT_HTTPAUTH => CURLAUTH_BASIC,
@@ -224,12 +240,10 @@ class MytoryMarkdownForDropbox
      * @param array $other_settings
      * @return bool|mixed
      */
-    private function accessDropbox($endpoint, $post_data = array(), $custom_header = array(), $other_settings = array())
+    private function accessDropbox($endpoint, $custom_header = array(), $post_data = array(), $other_settings = array())
     {
         $curl = curl_init();
         curl_setopt($curl, CURLOPT_URL, $endpoint);
-        curl_setopt($curl, CURLOPT_HEADER, false);
-        curl_setopt($curl, CURLOPT_NOBODY, false);
         if (!ini_get('open_basedir')) {
             curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);
         }
@@ -241,13 +255,13 @@ class MytoryMarkdownForDropbox
             }
         }
 
+        curl_setopt($curl, CURLOPT_POST, true);
         if (!empty($post_data)) {
-            curl_setopt($curl, CURLOPT_POST, 1);
             curl_setopt($curl, CURLOPT_POSTFIELDS, http_build_query($post_data));
         }
 
-        if (get_option('access_token')) {
-            $custom_header[] = 'Authorization: Bearer ' . get_option('access_token');
+        if (get_option('mm4d_access_token')) {
+            $custom_header[] = 'Authorization: Bearer ' . get_option('mm4d_access_token');
         }
 
         curl_setopt($curl, CURLOPT_HTTPHEADER, $custom_header);
@@ -255,6 +269,18 @@ class MytoryMarkdownForDropbox
         $content = curl_exec($curl);
         $this->checkCurlError($curl);
         return $content;
+    }
+
+    private function setDefaultMarkdownEngine()
+    {
+        if (get_option('mm4d_markdown_engine')) {
+            return;
+        }
+        if (phpversion() >= '5.3') {
+            update_option('mm4d_markdown_engine', 'parsedown');
+        } else {
+            update_option('mm4d_markdown_engine', 'markdownExtra');
+        }
     }
 
 }
