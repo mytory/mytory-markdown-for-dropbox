@@ -178,6 +178,7 @@ class MytoryMarkdownForDropbox
                 $this->markdown = new MM4DMarkdownExtra;
                 break;
             default:
+                include 'MM4DMarkdownExtra.php';
                 $this->markdown = new MM4DMarkdownExtra;
             // pass through
         }
