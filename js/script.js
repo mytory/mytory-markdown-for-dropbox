@@ -10,15 +10,6 @@
 jQuery(function ($) {
     var dropbox;
 
-    function initRemoveSettings() {
-        $('.js-remove-settings').click(function () {
-            $('.js-mm4d-input').each(function (i, el) {
-                $(el).val('');
-            });
-            $('#mm4d-form').submit();
-        });
-    }
-
     function initDropbox() {
         var accessToken = $('#mm4d-access-token').val();
         if (accessToken) {
@@ -85,7 +76,6 @@ jQuery(function ($) {
         }, 'json');
     }
 
-    initRemoveSettings();
     initDropbox();
     initFirstOpen();
 });
