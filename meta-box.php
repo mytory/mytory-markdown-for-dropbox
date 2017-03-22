@@ -37,7 +37,7 @@
 <script type="text/template" id="template-mm4d-li">
     <li class="<%- tag %>">
         <button class="u-button-like-text  <%- tag == 'folder' ? 'js-mm4d-change-directory' : 'js-mm4d-select' %>"
-            data-id="<%- id %>">
+            data-id="<%- id %>" data-path="<%- path %>">
             <%- name %>
         </button>
     </li>
