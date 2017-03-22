@@ -11,25 +11,17 @@ Author URI: https://mytory.net
 class MytoryMarkdownForDropbox
 {
     public $version = '1.0.0';
-    public $authKeys = array(
-        'access_token',
-        'account_id',
-        'state',
-        'token_type',
-        'uid',
-    );
+
     public $error = array(
         'status' => false,
         'msg' => '',
     );
     private $markdown;
 
-
     function __construct()
     {
         add_action('plugins_loaded', array($this, 'init'));
         add_action('add_meta_boxes', array($this, 'metaBox'));
-        add_action('save_post', array($this, 'savePost'));
         add_action('admin_menu', array($this, 'addMenu'));
         add_action('admin_init', array($this, 'registerSettings'));
         add_action('admin_enqueue_scripts', array($this, 'adminEnqueueScripts'));
@@ -83,11 +75,6 @@ class MytoryMarkdownForDropbox
     }
 
 
-    function savePost()
-    {
-
-    }
-
     function addMenu()
     {
         if (!current_user_can('activate_plugins')) {
@@ -105,44 +92,21 @@ class MytoryMarkdownForDropbox
         if (!current_user_can('activate_plugins')) {
             return null;
         }
-        register_setting('mm4d', 'app_key');
-        register_setting('mm4d', 'app_secret');
         register_setting('mm4d', 'access_token');
         register_setting('mm4d', 'markdown_engine');
-        foreach ($this->authKeys as $key) {
-            if ($key === 'state') {
-                continue;
-            }
-            register_setting('mm4d', $key);
-        }
     }
 
     function printSettingsPage()
     {
-        $secret_key = get_option('secret_key');
-        $app_key = get_option('app_key');
         $access_token = get_option('access_token');
         include 'settings.php';
-    }
-
-    /**
-     * verify 'state' from Dropbox. This is nonce of Dropbox.
-     */
-    function verifyStateNonce()
-    {
-        if (!wp_verify_nonce($_POST['state'], '_dropbox_auth')) {
-            echo 'fail';
-        } else {
-            echo 'pass';
-        }
-        die();
     }
 
     function getConvertedContent()
     {
         $id = $_POST['id'];
         $response = array();
-        $response['content'] = $this->markdown->convert($this->getFileContent($id));
+        $response['content'] = $this->convert($this->getFileContent($id));
         echo json_encode($response);
         die();
     }
@@ -210,7 +174,7 @@ class MytoryMarkdownForDropbox
                 break;
             default:
                 $this->markdown = new MM4DMarkdownExtra;
-                // pass through
+            // pass through
         }
     }
 
