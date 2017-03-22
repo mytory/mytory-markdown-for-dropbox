@@ -15,6 +15,7 @@ class MytoryMarkdownForDropbox
     public $error = array(
         'status' => false,
         'msg' => '',
+        'is_error' => true,
     );
     private $markdown;
 
@@ -93,12 +94,25 @@ class MytoryMarkdownForDropbox
             return null;
         }
         register_setting('mm4d', 'access_token');
+        register_setting('mm4d', 'code');
         register_setting('mm4d', 'markdown_engine');
     }
 
     function printSettingsPage()
     {
         $access_token = get_option('access_token');
+        $code = get_option('code');
+
+        if ($code and !$access_token) {
+            $access_token = $this->getAccessTokenByCode();
+            if ($access_token) {
+                update_option('access_token', $access_token);
+            } else {
+                $message = __('The code is invalid. ', 'mm4d') . $this->error['msg'];
+                var_dump($this->error);
+            }
+        }
+
         include 'settings.php';
     }
 
@@ -106,8 +120,12 @@ class MytoryMarkdownForDropbox
     {
         $id = $_POST['id'];
         $response = array();
-        $response['content'] = $this->convert($this->getFileContent($id));
-        echo json_encode($response);
+        if (!$content = $this->getFileContent($id)) {
+            echo json_encode($this->error);
+        } else {
+            $response['content'] = $this->convert($content);
+            echo json_encode($response);
+        }
         die();
     }
 
@@ -118,25 +136,14 @@ class MytoryMarkdownForDropbox
      */
     private function getFileContent($path)
     {
-        $curl = curl_init();
-        curl_setopt($curl, CURLOPT_URL, 'https://content.dropboxapi.com/2/files/download');
-        curl_setopt($curl, CURLOPT_HEADER, false);
-        curl_setopt($curl, CURLOPT_NOBODY, false);
-        if (!ini_get('open_basedir')) {
-            curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);
-        }
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($curl, CURLOPT_HTTPHEADER, array(
-            'Authorization: Bearer ' . get_option('access_token'),
+        $endpoint = 'https://content.dropboxapi.com/2/files/download';
+        $custom_header = array(
             'Dropbox-API-Arg: ' . json_encode(array(
                 'path' => $path,
             )),
-        ));
-        $content = curl_exec($curl);
+        );
 
-        if (!$this->checkCurlError($curl)) {
-            return false;
-        }
+        $content = $this->accessDropbox($endpoint, array(), $custom_header);
 
         return $content;
     }
@@ -145,10 +152,8 @@ class MytoryMarkdownForDropbox
     {
         $curl_info = curl_getinfo($curl);
         if ($curl_info['http_code'] != '200') {
-            $this->error = array(
-                'status' => true,
-                'msg' => __('Network Error! HTTP STATUS is ', 'mm4d') . $curl_info['http_code'],
-            );
+            $this->error['status'] = true;
+            $this->error['msg'] = __('Network Error! HTTP STATUS is ', 'mm4d') . $curl_info['http_code'];
             if ($curl_info['http_code'] == '404') {
                 $this->error['msg'] = 'Incorrect URL. File not found.';
             }
@@ -181,6 +186,58 @@ class MytoryMarkdownForDropbox
     private function convert($md_content)
     {
         return $this->markdown->convert($md_content);
+    }
+
+    private function getAccessTokenByCode()
+    {
+        $response = $this->accessDropbox('https://api.dropboxapi.com/oauth2/token', array(
+            'code' => get_option('code'),
+            'grant_type' => 'authorization_code',
+            'client_id' => (defined('MYTORY_MARKDOWN_APP_KEY') ? MYTORY_MARKDOWN_APP_KEY : '1y7djszzdziqchy'),
+            'client_secret' => '3fxwz342stx7j0u'
+        ), array(
+            'Content-Type: application/x-www-form-urlencoded'
+        ));
+        return $response;
+    }
+
+    /**
+     * @param $endpoint
+     * @param array $post_data
+     * @param array $custom_header
+     * @return bool|mixed
+     */
+    private function accessDropbox($endpoint, $post_data = array(), $custom_header = array())
+    {
+        $curl = curl_init();
+        curl_setopt($curl, CURLOPT_URL, $endpoint);
+        curl_setopt($curl, CURLOPT_HEADER, false);
+        curl_setopt($curl, CURLOPT_NOBODY, false);
+        if (!ini_get('open_basedir')) {
+            curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);
+        }
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+
+        if (!empty($post_data)) {
+            curl_setopt($curl, CURLOPT_POST, count($post_data));
+            curl_setopt($curl, CURLOPT_POSTFIELDS, $post_data);
+        }
+
+        if (get_option('access_token')) {
+            $custom_header[] = 'Authorization: Bearer ' . get_option('access_token');
+        }
+
+        curl_setopt($curl, CURLOPT_HTTPHEADER, $custom_header);
+        if (!$this->checkCurlError($curl)) {
+            $content = false;
+            return $content;
+        } else {
+            $content = curl_exec($curl);
+
+            var_dump($content);
+
+            return $content;
+        }
     }
 
 }

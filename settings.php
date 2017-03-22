@@ -4,6 +4,21 @@ $is_legacy_php = (phpversion() < '5.3');
 <div class="wrap">
     <h2>Mytory Markdown for Dropbox <?php _e('Settings') ?></h2>
 
+    <?php if (!empty($message)) { ?>
+        <p><?= $message ?></p>
+    <?php } ?>
+
+    <ul>
+        <li>code: <?= get_option('code') ?></li>
+        <li>access_token: <?= get_option('access_token') ?></li>
+    </ul>
+
+    <form method="post" action="https://api.dropboxapi.com/oauth2/token">
+        <input type="text" name="code" value="<?= get_option('code') ?>">
+        <input type="text" name="grant_type" value="authorization_code">
+        <input type="submit" value="ok">
+    </form>
+
     <form method="post" action="options.php" id="mm4d-form">
         <?php
         settings_fields('mm4d');
@@ -15,30 +30,30 @@ $is_legacy_php = (phpversion() < '5.3');
         ));
         ?>
         <p>
-            <?php if (get_option('access_token')) { ?>
+            <?php if (get_option('code')) { ?>
                 <a target="_blank" class="button  button-primary"
                    href="https://www.dropbox.com/oauth2/authorize?<?= $query_string ?>&force_reapprove=true">
-                    <?php _e('Get Dropbox Access Token Again', 'mm4d') ?>
+                    <?php _e('Get Dropbox Code Again', 'mm4d') ?>
                 </a>
                 |
                 <a target="_blank" target="_blank" href="https://www.dropbox.com/account/security#apps"
                    title="<?php esc_attr_e(__('Go to Dropbox Setting page and revoke.', 'mm4d')) ?>">
-                    <?php _e('to Revoke access', 'mm4d') ?>
+                    <?php _e('to Revoke Authentication', 'mm4d') ?>
                 </a>
             <?php } else { ?>
                 <a target="_blank" class="button  button-primary"
                    href="https://www.dropbox.com/oauth2/authorize?<?= $query_string ?>">
-                    <?php _e('Get Dropbox Access Token', 'mm4d') ?>
+                    <?php _e('Get Dropbox Code', 'mm4d') ?>
                 </a>
             <?php } ?>
         </p>
 
         <table class="form-table">
             <tr valign="top">
-                <th scope="row">Access Token</th>
+                <th scope="row">Code</th>
                 <td>
-                    <input type="text" class="js-mm4d-input  large-text" name="access_token"
-                           value="<?= get_option('access_token') ?>" title="access token">
+                    <input type="text" class="js-mm4d-input  large-text" name="code"
+                           value="<?= get_option('code') ?>" title="code">
                 </td>
             </tr>
         </table>
