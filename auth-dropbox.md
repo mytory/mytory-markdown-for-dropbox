@@ -4,7 +4,9 @@ title: Auth Dropbox
 permalink: /auth-dropbox/
 ---
 
-<input type="text" id="access_token">
+Copy and paste below access token.
+
+<input class="u-full" type="text" id="access_token">
 
 <script src="/js/underscore-min.js"></script>
 <script>
