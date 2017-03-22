@@ -13,7 +13,7 @@ jQuery(function ($) {
     function initDropbox() {
         var accessToken = $('#mm4d-access-token').val();
         if (accessToken) {
-            dropbox = new Dropbox({accessToken: 'qMVnmVlROZwAAAAAAADO6yhOibLJue8t8XawDB8tEr7cCY94xJO8R99rjsJ6Dgbe'});
+            dropbox = new Dropbox({accessToken: accessToken});
         }
     }
 
