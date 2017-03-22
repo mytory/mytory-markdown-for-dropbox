@@ -8,14 +8,17 @@ Version: 1.0.0
 Author URI: https://mytory.net
 */
 
+// If key and secret is set in wp-config.php, use it. Otherwise use default key and secret.
+!defined('MYTORY_MARKDOWN_APP_KEY') and define('MYTORY_MARKDOWN_APP_KEY', '1y7djszzdziqchy');
+!defined('MYTORY_MARKDOWN_APP_SECRET') and define('MYTORY_MARKDOWN_APP_SECRET', '3fxwz342stx7j0u');
+
 class MytoryMarkdownForDropbox
 {
     public $version = '1.0.0';
-
     public $error = array(
         'status' => false,
         'msg' => '',
-        'is_error' => true,
+        'is_error' => false,
     );
     private $markdown;
 
@@ -94,6 +97,9 @@ class MytoryMarkdownForDropbox
             return null;
         }
         register_setting('mm4d', 'access_token');
+        register_setting('mm4d', 'token_type');
+        register_setting('mm4d', 'uid');
+        register_setting('mm4d', 'account_id');
         register_setting('mm4d', 'code');
         register_setting('mm4d', 'markdown_engine');
     }
@@ -104,12 +110,15 @@ class MytoryMarkdownForDropbox
         $code = get_option('code');
 
         if ($code and !$access_token) {
-            $access_token = $this->getAccessTokenByCode();
-            if ($access_token) {
-                update_option('access_token', $access_token);
-            } else {
+            $response = json_decode($this->getAccessTokenByCode());
+            if ($this->error['is_error']) {
                 $message = __('The code is invalid. ', 'mm4d') . $this->error['msg'];
-                var_dump($this->error);
+                $message .= '<br>' . print_r($response, true);
+            } else {
+                update_option('access_token', $response->access_token);
+                update_option('token_type', $response->token_type);
+                update_option('uid', $response->uid);
+                update_option('account_id', $response->account_id);
             }
         }
 
@@ -152,6 +161,7 @@ class MytoryMarkdownForDropbox
     {
         $curl_info = curl_getinfo($curl);
         if ($curl_info['http_code'] != '200') {
+            $this->error['is_error'] = true;
             $this->error['status'] = true;
             $this->error['msg'] = __('Network Error! HTTP STATUS is ', 'mm4d') . $curl_info['http_code'];
             if ($curl_info['http_code'] == '404') {
@@ -194,10 +204,11 @@ class MytoryMarkdownForDropbox
         $response = $this->accessDropbox('https://api.dropboxapi.com/oauth2/token', array(
             'code' => get_option('code'),
             'grant_type' => 'authorization_code',
-            'client_id' => (defined('MYTORY_MARKDOWN_APP_KEY') ? MYTORY_MARKDOWN_APP_KEY : '1y7djszzdziqchy'),
-            'client_secret' => '3fxwz342stx7j0u'
         ), array(
             'Content-Type: application/x-www-form-urlencoded'
+        ), array(
+            CURLOPT_USERPWD => MYTORY_MARKDOWN_APP_KEY . ':' . MYTORY_MARKDOWN_APP_SECRET,
+            CURLOPT_HTTPAUTH => CURLAUTH_BASIC,
         ));
         return $response;
     }
@@ -206,9 +217,10 @@ class MytoryMarkdownForDropbox
      * @param $endpoint
      * @param array $post_data
      * @param array $custom_header
+     * @param array $other_settings
      * @return bool|mixed
      */
-    private function accessDropbox($endpoint, $post_data = array(), $custom_header = array())
+    private function accessDropbox($endpoint, $post_data = array(), $custom_header = array(), $other_settings = array())
     {
         $curl = curl_init();
         curl_setopt($curl, CURLOPT_URL, $endpoint);
@@ -219,9 +231,15 @@ class MytoryMarkdownForDropbox
         }
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
 
+        if (!empty($other_settings)) {
+            foreach ($other_settings as $key => $value) {
+                curl_setopt($curl, $key, $value);
+            }
+        }
+
         if (!empty($post_data)) {
-            curl_setopt($curl, CURLOPT_POST, count($post_data));
-            curl_setopt($curl, CURLOPT_POSTFIELDS, $post_data);
+            curl_setopt($curl, CURLOPT_POST, 1);
+            curl_setopt($curl, CURLOPT_POSTFIELDS, http_build_query($post_data));
         }
 
         if (get_option('access_token')) {
@@ -229,18 +247,12 @@ class MytoryMarkdownForDropbox
         }
 
         curl_setopt($curl, CURLOPT_HTTPHEADER, $custom_header);
-        if (!$this->checkCurlError($curl)) {
-            $content = false;
-            return $content;
-        } else {
-            $content = curl_exec($curl);
 
-            var_dump($content);
-
-            return $content;
-        }
+        $content = curl_exec($curl);
+        $this->checkCurlError($curl);
+        return $content;
     }
 
 }
 
-new MytoryMarkdownForDropbox;
+$mytoryMarkdownForDropbox = new MytoryMarkdownForDropbox;

@@ -8,24 +8,13 @@ $is_legacy_php = (phpversion() < '5.3');
         <p><?= $message ?></p>
     <?php } ?>
 
-    <ul>
-        <li>code: <?= get_option('code') ?></li>
-        <li>access_token: <?= get_option('access_token') ?></li>
-    </ul>
-
-    <form method="post" action="https://api.dropboxapi.com/oauth2/token">
-        <input type="text" name="code" value="<?= get_option('code') ?>">
-        <input type="text" name="grant_type" value="authorization_code">
-        <input type="submit" value="ok">
-    </form>
-
     <form method="post" action="options.php" id="mm4d-form">
         <?php
         settings_fields('mm4d');
         do_settings_sections('mm4d');
 
         $query_string = http_build_query(array(
-            'client_id' => (defined('MYTORY_MARKDOWN_APP_KEY') ? MYTORY_MARKDOWN_APP_KEY : '1y7djszzdziqchy'),
+            'client_id' => MYTORY_MARKDOWN_APP_KEY,
             'response_type' => 'code',
         ));
         ?>
