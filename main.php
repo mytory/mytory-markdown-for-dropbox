@@ -37,6 +37,7 @@ class MytoryMarkdownForDropbox
         add_action('add_meta_boxes', array($this, 'metaBox'));
         add_action('admin_menu', array($this, 'addMenu'));
         add_action('admin_init', array($this, 'registerSettings'));
+        add_action('save_post', array($this, 'savePost'));
         add_action('admin_enqueue_scripts', array($this, 'adminEnqueueScripts'));
         add_action('wp_ajax_mm4d_get_converted_content', array($this, 'getConvertedContent'));
         add_action('wp_ajax_mm4d_delete_options', array($this, 'deleteOptions'));
@@ -61,6 +62,20 @@ class MytoryMarkdownForDropbox
             delete_option('mm4d_' . $key);
         }
         die();
+    }
+
+    function savePost($post_id)
+    {
+        if (!current_user_can('edit_post', $post_id)) {
+            return null;
+        }
+
+        // 데이터 저장
+        if (isset($_POST['_mm4d_path'])) {
+            update_post_meta($post_id, '_mm4d_path', $_POST['_mm4d_path']);
+            update_post_meta($post_id, '_mm4d_id', $_POST['_mm4d_id']);
+            update_post_meta($post_id, '_mm4d_rev', $_POST['_mm4d_rev']);
+        }
     }
 
     function adminEnqueueScripts($hook)
@@ -89,8 +104,12 @@ class MytoryMarkdownForDropbox
     function metaBoxInner()
     {
         $mm4d_path = '';
+        $mm4d_id = '';
+        $mm4d_rev = '';
         if (isset($_GET['post'])) {
             $mm4d_path = get_post_meta($_GET['post'], '_mm4d_path', true);
+            $mm4d_id = get_post_meta($_GET['post'], '_mm4d_id', true);
+            $mm4d_rev = get_post_meta($_GET['post'], '_mm4d_rev', true);
         }
         include 'meta-box.php';
     }

@@ -57,7 +57,8 @@ jQuery(function ($) {
                         name: entry.name,
                         tag: entry['.tag'],
                         id: entry.id,
-                        path: entry.path_display
+                        path: entry.path_display,
+                        rev: entry.rev
                     }));
                 });
                 $ul.appendTo($content);
@@ -83,9 +84,11 @@ jQuery(function ($) {
 
     function setConvertedContent(el) {
         var id = $(el).data('id'),
-            path = $(el).data('path');
+            path = $(el).data('path'),
+            rev = $(el).data('rev');
         $('#mm4d-path').val(path);
         $('#mm4d-id').val(id);
+        $('#mm4d-rev').val(rev);
         $.post(ajaxurl, {
             action: 'mm4d_get_converted_content',
             id: id

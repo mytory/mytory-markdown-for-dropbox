@@ -17,7 +17,10 @@
         <td>
             <input type="button" class="button  js-open-dropbox-list"
                    value="<?php esc_attr_e(__('Select')) ?>" title="Dropbox">
-            <input type="text" name="mm4d_path" id="mm4d-path" class="large-text" value="<?php echo $mm4d_path ?>">
+            path: <input type="text" name="_mm4d_path" id="mm4d-path" class="large-text" value="<?= $mm4d_path ?>" title="path">
+
+            id: <input type="text" name="_mm4d_id" id="mm4d-id" class="large-text" value="<?= $mm4d_id ?>" title="id">
+            rev: <input type="text" name="_mm4d_rev" id="mm4d-rev" class="large-text" value="<?= $mm4d_rev ?>" title="revision">
         </td>
     </tr>
     <tr>
@@ -61,7 +64,7 @@
 <script type="text/template" id="template-mm4d-li">
     <li class="<%- tag %>">
         <button class="u-button-like-text  <%- tag == 'folder' ? 'js-mm4d-change-directory' : 'js-mm4d-select' %>"
-                data-id="<%- id %>" data-path="<%- path %>">
+                data-id="<%- id %>" data-path="<%- path %>" data-rev="<%- rev %>">
             <%- name %>
         </button>
     </li>
