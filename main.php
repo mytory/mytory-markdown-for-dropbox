@@ -78,10 +78,14 @@ class MytoryMarkdownForDropbox
                 return;
             }
 
+            $mm4d_id = get_post_meta($current_object->ID, '_mm4d_id', true);
+            $mm4d_path = get_post_meta($current_object->ID, '_mm4d_path', true);
+
             if (!empty($current_object->post_type)
                 && ($post_type_object = get_post_type_object($current_object->post_type))
                 && current_user_can('edit_post', $current_object->ID)
                 && $post_type_object->show_in_admin_bar
+                && ($mm4d_id or $mm4d_path)
             ) {
                 // 개별 글인 경우
                 $wp_admin_bar->add_menu(array(
