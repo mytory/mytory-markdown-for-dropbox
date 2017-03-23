@@ -7,28 +7,32 @@
     };
 })(jQuery);
 
+
 jQuery(function ($) {
     var dropbox;
-
     function initRevoke() {
         $('.js-mm4d-revoke').click(function () {
             if (!confirm('Really?')) {
                 return false;
             }
+            dropbox.authTokenRevoke()
+                .then(function (response) {
+
+                })
+                .catch(function (data) {
+                    alert(data.response.body.error_summary);
+                });
+
             $.post(ajaxurl, {
-                'action': 'mm4d_revoke'
-            }, function (response) {
-                if (response.is_error) {
-                    alert(response.msg);
-                } else {
-                    location.reload();
-                }
-            }, 'json');
+                action: 'mm4d_delete_options'
+            }, function () {
+                location.reload();
+            });
         });
     }
 
     function initDropbox() {
-        var accessToken = $('#mm4d-access-token').val();
+        var accessToken = $('#mm4d_access_token').val();
         if (accessToken) {
             dropbox = new Dropbox({accessToken: accessToken});
         }

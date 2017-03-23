@@ -38,7 +38,7 @@ class MytoryMarkdownForDropbox
         add_action('admin_init', array($this, 'registerSettings'));
         add_action('admin_enqueue_scripts', array($this, 'adminEnqueueScripts'));
         add_action('wp_ajax_mm4d_get_converted_content', array($this, 'getConvertedContent'));
-        add_action('wp_ajax_mm4d_revoke', array($this, 'revoke'));
+        add_action('wp_ajax_mm4d_delete_options', array($this, 'deleteOptions'));
         register_activation_hook(__FILE__, array($this, 'activate'));
         $this->setDefaultMarkdownEngine();
         $this->initMarkdownObject();
@@ -54,22 +54,10 @@ class MytoryMarkdownForDropbox
         $this->setDefaultMarkdownEngine();
     }
 
-    function revoke()
+    function deleteOptions()
     {
-        $response = $this->accessDropbox('https://api.dropboxapi.com/2/auth/token/revoke', array(
-            'Content-Type: application/json; charset=utf-8',
-        ));
-
-        if ($this->error['is_error']) {
-            $this->error['response'] = $response;
-            echo json_encode($this->error);
-        } else {
-            foreach ($this->optionKeys as $key) {
-                delete_option('mm4d_' . $key);
-            }
-            echo json_encode(array(
-                'result' => 'success',
-            ));
+        foreach ($this->optionKeys as $key) {
+            delete_option('mm4d_' . $key);
         }
         die();
     }

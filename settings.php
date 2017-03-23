@@ -8,9 +8,6 @@ $is_legacy_php = (phpversion() < '5.3');
         <p><?= $message ?></p>
     <?php } ?>
 
-    <?= get_option('mm4d_access_token') ?>
-
-
     <?php
     $query_string = http_build_query(array(
         'client_id' => MYTORY_MARKDOWN_APP_KEY,
@@ -19,10 +16,6 @@ $is_legacy_php = (phpversion() < '5.3');
     ?>
     <p>
         <?php if (get_option('mm4d_code')) { ?>
-            <a target="_blank" class="button  button-primary"
-               href="https://www.dropbox.com/oauth2/authorize?<?= $query_string ?>&force_reapprove=true">
-                <?php _e('Get Dropbox Code Again', 'mm4d') ?>
-            </a>
             <button type="button" class="button  js-mm4d-revoke">
                 <?php _e('Revoke', 'mm4d') ?>
             </button>
@@ -41,7 +34,7 @@ $is_legacy_php = (phpversion() < '5.3');
         foreach ($this->optionKeys as $key) {
             if (in_array($key, array('mm4d_code', 'mm4d_markdown_engine'))) { continue; }
             ?>
-            <input type="hidden" name="mm4d_<?= $key ?>" value="<?= get_option('mm4d_' . $key) ?>">
+            <input type="hidden" id="mm4d_<?= $key ?>" name="mm4d_<?= $key ?>" value="<?= get_option('mm4d_' . $key) ?>">
         <?php } ?>
         <table class="form-table" <?= (get_option('mm4d_access_token')) ? 'hidden' : '' ?>>
             <tr valign="top">
