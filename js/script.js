@@ -32,7 +32,9 @@ jQuery(function ($) {
     function initModal() {
         var $remodal = $('[data-remodal-id=modal]');
         if ($remodal.length > 0) {
-            modal = $remodal.remodal();
+            modal = $remodal.remodal({
+                hashTracking: false
+            });
         }
     }
 
@@ -63,8 +65,8 @@ jQuery(function ($) {
                 });
                 $ul.appendTo($content);
             })
-            .catch(function (error) {
-                console.log(error);
+            .catch(function (data) {
+                console.log(data);
             });
     }
 
@@ -77,21 +79,53 @@ jQuery(function ($) {
 
     function initSelect() {
         $('.js-dropbox-list').on('click', '.js-mm4d-select', function (e) {
-            setConvertedContent(this);
+            var obj = {
+                id: $(this).data('id'),
+                path: $(this).data('path'),
+                rev: $(this).data('rev')
+            };
+            setConvertedContent(obj);
+            setFileMetadata(obj);
             modal.close();
         });
     }
 
-    function setConvertedContent(el) {
-        var id = $(el).data('id'),
-            path = $(el).data('path'),
-            rev = $(el).data('rev');
-        $('#mm4d-path').val(path);
-        $('#mm4d-id').val(id);
-        $('#mm4d-rev').val(rev);
+    function initUpdate() {
+        $('.js-mm4d-update').on('click', function (e) {
+            var obj = {
+                id: $('#mm4d-id').val(),
+                path: $('#mm4d-path').val(),
+                rev: $('#mm4d-rev').val()
+            };
+
+            dropbox.filesAlphaGetMetadata({
+                path: obj.id || obj.path,
+                include_media_info: false,
+                include_deleted: false,
+                include_has_explicit_shared_members: false
+            }).then(function (file) {
+                if (file.rev != obj.rev) {
+                    console.log(file.rev, obj.rev, (file.rev == obj.rev));
+                    setFileMetadata({
+                        id: file.id,
+                        path: file.path_display,
+                        rev: file.rev
+                    });
+                    setConvertedContent(obj);
+                } else {
+                    alert('the file has not modified.');
+                }
+            }).catch(function (data) {
+                alert(data.response.body.error_summary);
+            });
+
+        });
+    }
+
+    function setConvertedContent(obj) {
         $.post(ajaxurl, {
             action: 'mm4d_get_converted_content',
-            id: id
+            id: obj.id
         }, function (response) {
             if (typeof response['is_error'] != 'undefined' && response['is_error'] == true) {
                 alert(response.msg);
@@ -99,6 +133,12 @@ jQuery(function ($) {
                 setContent(response);
             }
         }, 'json');
+    }
+
+    function setFileMetadata(obj) {
+        $('#mm4d-path').val(obj.path);
+        $('#mm4d-id').val(obj.id);
+        $('#mm4d-rev').val(obj.rev);
     }
 
     function setContent(obj) {
@@ -126,4 +166,5 @@ jQuery(function ($) {
     initModal();
     initDropboxListOpen();
     initSelect();
+    initUpdate();
 });

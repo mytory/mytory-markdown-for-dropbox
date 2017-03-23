@@ -26,7 +26,7 @@
     <tr>
         <th><?php _e('Update') ?></th>
         <td>
-            <button type="button" class="button js-update-content">
+            <button type="button" class="button js-mm4d-update">
                 <?php _e('Update Editor Content', 'mm4d') ?>
             </button>
         </td>
