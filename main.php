@@ -96,7 +96,7 @@ class MytoryMarkdownForDropbox
     {
         add_meta_box(
             'mm4d',
-            __('Markdown File', 'mm4d'),
+            'Mytory Markdown for Dropbox',
             array($this, 'metaBoxInner')
         );
     }
