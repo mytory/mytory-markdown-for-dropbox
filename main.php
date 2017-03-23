@@ -42,6 +42,10 @@ class MytoryMarkdownForDropbox
         add_action('wp_ajax_mm4d_get_converted_content', array($this, 'getConvertedContent'));
         add_action('wp_ajax_mm4d_delete_options', array($this, 'deleteOptions'));
         register_activation_hook(__FILE__, array($this, 'activate'));
+
+        $plugin = plugin_basename(__FILE__);
+        add_filter("plugin_action_links_$plugin", array($this, 'pluginSettingPage'));
+
         $this->setDefaultOptions();
         $this->initMarkdownObject();
     }
@@ -49,6 +53,13 @@ class MytoryMarkdownForDropbox
     function init()
     {
         load_plugin_textdomain('mm4d', false, dirname(plugin_basename(__FILE__)) . '/lang');
+    }
+
+    function pluginSettingPage($links)
+    {
+        $settings_link = sprintf('<a href="%s">%s</a>', menu_page_url('mm4d', false), __('Settings'));
+        array_unshift($links, $settings_link);
+        return $links;
     }
 
     function activate()
