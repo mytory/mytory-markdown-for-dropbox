@@ -221,7 +221,7 @@ class MytoryMarkdownForDropbox
         $matches = array();
         preg_match('/<h1>(.*)<\/h1>/', $content, $matches);
         if (!empty($matches)) {
-            $post['post_title'] = $matches[1];
+            $post['post_title'] = html_entity_decode($matches[1], ENT_QUOTES, 'utf-8');
         } else {
             $post['post_title'] = false;
         }
