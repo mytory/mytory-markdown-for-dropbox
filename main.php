@@ -39,8 +39,10 @@ class MytoryMarkdownForDropbox
         add_action('admin_init', array($this, 'registerSettings'));
         add_action('save_post', array($this, 'savePost'));
         add_action('admin_enqueue_scripts', array($this, 'adminEnqueueScripts'));
+        add_action('wp_enqueue_scripts', array($this, 'enqueueScripts'));
         add_action('wp_ajax_mm4d_get_converted_content', array($this, 'getConvertedContent'));
         add_action('wp_ajax_mm4d_delete_options', array($this, 'deleteOptions'));
+        add_action('wp_ajax_mm4d_update_in_client', array($this, 'updateInClient'));
         register_activation_hook(__FILE__, array($this, 'activate'));
 
         $plugin = plugin_basename(__FILE__);
@@ -63,18 +65,37 @@ class MytoryMarkdownForDropbox
         return $links;
     }
 
-    function addAdminBarMenu($admin_bar)
+    function addAdminBarMenu($wp_admin_bar)
     {
-        $admin_bar->add_menu( array(
-            'id'    => 'my-item',
-            'parent' => 'top-secondary',
-            'title' => 'My Item',
-            'href'  => '#',
-            'meta'  => array(
-                'title' => __('My Item'),
-            ),
-        ) );
+        global $wp_the_query;
+
+        if (!is_admin()) {
+            // 클라이언트단인 경우
+            $current_object = $wp_the_query->get_queried_object();
+
+            if (empty($current_object)) {
+                // 글이나 목록을 보는 게 아닌 경우
+                return;
+            }
+
+            if (!empty($current_object->post_type)
+                && ($post_type_object = get_post_type_object($current_object->post_type))
+                && current_user_can('edit_post', $current_object->ID)
+                && $post_type_object->show_in_admin_bar
+            ) {
+                // 개별 글인 경우
+                $wp_admin_bar->add_menu(array(
+                    'id' => 'mm4d-update',
+                    'title' => 'Markdown ' . __('Update'),
+                    'href' => admin_url('admin-ajax.php'),
+                    'meta' => array(
+                        'rel' => $current_object->ID,
+                    )
+                ));
+            }
+        }
     }
+
 
     function activate()
     {
@@ -103,6 +124,83 @@ class MytoryMarkdownForDropbox
         }
     }
 
+    function updateInClient()
+    {
+        $post_id = filter_input(INPUT_POST, 'post_id', FILTER_SANITIZE_NUMBER_INT);
+
+        if (!current_user_can('edit_post', $post_id)) {
+            return null;
+        }
+
+        $mm4d_id = get_post_meta($post_id, '_mm4d_id', true);
+        $mm4d_path = get_post_meta($post_id, '_mm4d_path', true);
+        $mm4d_rev = get_post_meta($post_id, '_mm4d_rev', true);
+
+        $metadata = json_decode($this->accessDropbox('https://api.dropboxapi.com/2/files/get_metadata', array(
+            "Content-Type: application/json",
+        ), array(
+            "path" => $mm4d_path,
+            "include_media_info" => false,
+            "include_deleted" => false,
+            "include_has_explicit_shared_members" => false
+        )));
+
+        if (!empty($metadata->error_summary)) {
+            echo json_encode(array(
+                'result' => 'fail',
+                'message' => $metadata->error_summary,
+            ));
+            die();
+        } elseif ($metadata->rev == $mm4d_rev) {
+            echo json_encode(array(
+                'result' => 'fail',
+                'message' => __('No change.', 'mm4d'),
+            ));
+            die();
+        }
+
+        $content = $this->accessDropbox('https://content.dropboxapi.com/2/files/download', array(
+            'Dropbox-API-Arg: ' . json_encode(array(
+                'path' => ($mm4d_id ? $mm4d_id : $mm4d_path)
+            ))
+        ));
+
+        if (!is_null(json_decode($content))) {
+            $content = json_decode($content);
+        }
+
+        if (!empty($content->error_summary)) {
+            echo json_encode(array(
+                'result' => 'fail',
+                'message' => $content->error_summary,
+            ));
+        } else {
+
+            update_post_meta($post_id, '_mm4d_rev', $metadata->rev);
+            update_post_meta($post_id, '_mm4d_path', $metadata->path_display);
+
+            $postarr = $this->convert($content);
+            $postarr['ID'] = $post_id;
+            $result = wp_update_post($postarr, true);
+
+            if (is_wp_error($result)) {
+                echo json_encode(array(
+                    'result' => 'fail',
+                    'message' => $result->get_error_message(),
+                    'postarr' => $postarr
+                ));
+            } else {
+                echo json_encode(array(
+                    'result' => 'success',
+                    'postarr' => $postarr
+                ));
+            }
+
+        }
+
+        die();
+    }
+
     function adminEnqueueScripts($hook)
     {
         if (!in_array($hook, array('post.php', 'post-new.php', 'settings_page_mm4d'))) {
@@ -112,10 +210,19 @@ class MytoryMarkdownForDropbox
         wp_enqueue_script('remodal', plugins_url('js-lib/remodal/remodal.min.js', __FILE__), array(), null, true);
         wp_enqueue_style('remodal', plugins_url('js-lib/remodal/remodal.css', __FILE__));
         wp_enqueue_style('remodal-theme', plugins_url('js-lib/remodal/remodal-default-theme.css', __FILE__));
-        wp_enqueue_script('mm4d-script', plugins_url('js/script.js', __FILE__),
+        wp_enqueue_script('mm4d-script', plugins_url('js/admin.js', __FILE__),
             array('dropbox-sdk', 'underscore', 'remodal'),
             $this->version, true);
         wp_enqueue_style('mm4d-style', plugins_url('style.css', __FILE__));
+    }
+
+    function enqueueScripts()
+    {
+        if ((is_single() or is_page()) and current_user_can('edit_post', get_the_ID())) {
+            wp_enqueue_script('mm4d-client', plugins_url('js/client.js', __FILE__),
+                array('jquery'),
+                $this->version, true);
+        }
     }
 
     function metaBox()
@@ -299,6 +406,7 @@ class MytoryMarkdownForDropbox
     private function accessDropbox($endpoint, $custom_header = array(), $post_data = array(), $other_settings = array())
     {
         $curl = curl_init();
+        curl_setopt($curl, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_1);
         curl_setopt($curl, CURLOPT_URL, $endpoint);
         if (!ini_get('open_basedir')) {
             curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);
@@ -313,15 +421,14 @@ class MytoryMarkdownForDropbox
 
         if (!empty($post_data)) {
             curl_setopt($curl, CURLOPT_POST, true);
-            curl_setopt($curl, CURLOPT_POSTFIELDS, http_build_query($post_data));
+            curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($post_data));
         }
 
         if (get_option('mm4d_access_token')) {
-            $custom_header[] = 'Authorization: Bearer ' . get_option('mm4d_access_token');
+            array_unshift($custom_header, 'Authorization: Bearer ' . get_option('mm4d_access_token'));
         }
 
         curl_setopt($curl, CURLOPT_HTTPHEADER, $custom_header);
-
         $content = curl_exec($curl);
         $this->checkCurlError($curl);
         return $content;
