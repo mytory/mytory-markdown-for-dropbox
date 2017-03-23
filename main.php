@@ -90,6 +90,7 @@ class MytoryMarkdownForDropbox
         wp_enqueue_script('mm4d-script', plugins_url('js/script.js', __FILE__),
             array('dropbox-sdk', 'underscore', 'remodal'),
             $this->version, true);
+        wp_enqueue_style('mm4d-style', plugins_url('style.css', __FILE__));
     }
 
     function metaBox()

@@ -1,13 +1,3 @@
-<style>
-    .u-button-like-text {
-        margin: 0;
-        padding: 0;
-        border: 0;
-        background: transparent;
-        font-size: inherit;
-    }
-</style>
-
 <input type="hidden" id="mm4d_access_token" value="<?= get_option('mm4d_access_token') ?>">
 <input type="hidden" id="mm4d_extensions" value="<?= get_option('mm4d_extensions') ?>">
 
@@ -17,10 +7,12 @@
         <td>
             <input type="button" class="button  js-open-dropbox-list"
                    value="<?php esc_attr_e(__('Select')) ?>" title="Dropbox">
-            <input readonly type="text" name="_mm4d_path" id="mm4d-path" class="regular-text" value="<?= $mm4d_path ?>" title="path">
+            <input readonly type="text" name="_mm4d_path" id="mm4d-path" class="regular-text" value="<?= $mm4d_path ?>"
+                   title="path">
 
             <input type="hidden" name="_mm4d_id" id="mm4d-id" class="large-text" value="<?= $mm4d_id ?>" title="id">
-            <input type="hidden" name="_mm4d_rev" id="mm4d-rev" class="large-text" value="<?= $mm4d_rev ?>" title="revision">
+            <input type="hidden" name="_mm4d_rev" id="mm4d-rev" class="large-text" value="<?= $mm4d_rev ?>"
+                   title="revision">
         </td>
     </tr>
     <tr>
@@ -47,7 +39,8 @@
         <?php _e('Please Rate and Review', 'mm4d') ?>
     </a>
     |
-    <a target="_blank" href="https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=QUWVEWJ3N7M4W&lc=GA&item_name=Mytory%20Markdown&currency_code=USD&bn=PP%2dDonationsBF%3abtn_donate_SM%2egif%3aNonHosted">
+    <a target="_blank"
+       href="https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=QUWVEWJ3N7M4W&lc=GA&item_name=Mytory%20Markdown&currency_code=USD&bn=PP%2dDonationsBF%3abtn_donate_SM%2egif%3aNonHosted">
         <?php _e('Donate', 'mm4d') ?>
     </a>
 </p>
@@ -55,16 +48,23 @@
 
 <div class="js-dropbox-list" data-remodal-id="modal">
     <button data-remodal-action="close" class="remodal-close"></button>
-    <h1 class="js-dropbox-list-title">/</h1>
+    <h1 class="dropbox-list-title  js-dropbox-list-title">/</h1>
 
-    <div class="js-dropbox-list-content"></div>
+    <div class="dropbox-list-content  js-dropbox-list-content"></div>
 </div>
 
 <script type="text/template" id="template-mm4d-li">
     <li class="<%- tag %>">
-        <button class="u-button-like-text  <%- tag == 'folder' ? 'js-mm4d-change-directory' : 'js-mm4d-select' %>"
+        <button class="u-button-like-text  dropbox-item  <%- tag == 'folder' ? 'js-mm4d-change-directory' : 'js-mm4d-select' %>"
                 data-id="<%- id %>" data-path="<%- path %>" data-rev="<%- rev %>">
-            <%- name %>
+            <% if (tag == 'folder') { %>
+            <span class="dashicons dashicons-category"></span>
+            <% } %>
+            <% if (tag == 'file') { %>
+            <span class="dashicons dashicons-media-text"></span>
+            <% } %>
+
+            <span class="js-name"><%- name %></span>
         </button>
     </li>
 </script>
