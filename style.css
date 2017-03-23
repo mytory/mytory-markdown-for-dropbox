@@ -8,6 +8,14 @@
     font-size: inherit;
 }
 
+.dropbox-list {
+    transition: opacity 0.5s;
+}
+
+.translucent {
+    opacity: .5;
+}
+
 .dropbox-list-title {
     font-size: 1.2em;
 }

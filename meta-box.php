@@ -46,7 +46,7 @@
 </p>
 
 
-<div class="js-dropbox-list" data-remodal-id="modal">
+<div class="js-dropbox-list  dropbox-list" data-remodal-id="modal">
     <button data-remodal-action="close" class="remodal-close"></button>
     <h1 class="dropbox-list-title  js-dropbox-list-title">/</h1>
 
@@ -55,7 +55,7 @@
 
 <script type="text/template" id="template-mm4d-li">
     <li class="<%- tag %>">
-        <button class="u-button-like-text  dropbox-item  <%- tag == 'folder' ? 'js-mm4d-change-directory' : 'js-mm4d-select' %>"
+        <button class="u-button-like-text  dropbox-item  <%- tag == 'folder' ? 'js-mm4d-change-directory' : 'js-mm4d-select-file' %>"
                 data-id="<%- id %>" data-path="<%- path %>" data-rev="<%- rev %>">
             <% if (tag == 'folder') { %>
             <span class="dashicons dashicons-category"></span>

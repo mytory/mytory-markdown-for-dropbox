@@ -39,17 +39,29 @@ jQuery(function ($) {
     }
 
     function drawList(path, dropbox) {
+        var $container = $('.js-dropbox-list');
         var $content = $('.js-dropbox-list-content');
         var $title = $('.js-dropbox-list-title');
         var template = _.template($('#template-mm4d-li').html());
+
+        $container.addClass('translucent');
+
         dropbox.filesListFolder({path: path})
             .then(function (response) {
-                console.log(response);
-                if (path) {
-                    $title.text(path);
-                }
+                $title.text(path);
                 $content.html('');
                 var $ul = $('<ul>');
+
+                if (path.length > 1) {
+                    $ul.append(template({
+                        name: '..',
+                        tag: 'folder',
+                        id: '',
+                        path: getParentPath(path),
+                        rev: ''
+                    }));
+                }
+
                 _.forEach(response.entries, function (entry) {
                     var extension = entry.name.substr(entry.name.lastIndexOf('.') + 1);
                     if (entry['.tag'] == 'file' && $('#mm4d_extensions').val().split(',').indexOf(extension) === -1) {
@@ -64,21 +76,35 @@ jQuery(function ($) {
                     }));
                 });
                 $ul.appendTo($content);
+                $container.removeClass('translucent');
             })
             .catch(function (data) {
                 console.log(data);
             });
     }
 
+    function getParentPath(path) {
+        var pathArray = _.filter(path.split('/'));
+        pathArray.pop();
+        if (pathArray.length == 0) {
+            return '';
+        } else {
+            return '/' + pathArray.join('/');
+        }
+    }
+
     function initDropboxListOpen() {
         $('.js-open-dropbox-list').click(function () {
-            drawList('', dropbox);
+            var $content = $('.js-dropbox-list-content');
+            if (!$.trim($content.text())) {
+                drawList('', dropbox);
+            }
             modal.open();
         });
     }
 
-    function initSelect() {
-        $('.js-dropbox-list').on('click', '.js-mm4d-select', function (e) {
+    function initSelectFile() {
+        $('.js-dropbox-list').on('click', '.js-mm4d-select-file', function (e) {
             var obj = {
                 id: $(this).data('id'),
                 path: $(this).data('path'),
@@ -87,6 +113,12 @@ jQuery(function ($) {
             setConvertedContent(obj);
             setFileMetadata(obj);
             modal.close();
+        });
+    }
+
+    function initChangeDirectory() {
+        $('.js-dropbox-list').on('click', '.js-mm4d-change-directory', function (e) {
+            drawList($(this).data('path'), dropbox);
         });
     }
 
@@ -164,6 +196,7 @@ jQuery(function ($) {
     initDropbox();
     initModal();
     initDropboxListOpen();
-    initSelect();
+    initSelectFile();
+    initChangeDirectory();
     initUpdate();
 });
