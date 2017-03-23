@@ -32,7 +32,7 @@ $is_legacy_php = (phpversion() < '5.3');
         settings_fields('mm4d');
         do_settings_sections('mm4d');
         foreach ($this->optionKeys as $key) {
-            if (in_array($key, array('mm4d_code', 'mm4d_markdown_engine'))) { continue; }
+            if (in_array($key, array('mm4d_code', 'mm4d_markdown_engine', 'extensions'))) { continue; }
             ?>
             <input type="hidden" id="mm4d_<?= $key ?>" name="mm4d_<?= $key ?>" value="<?= get_option('mm4d_' . $key) ?>">
         <?php } ?>
@@ -81,6 +81,17 @@ $is_legacy_php = (phpversion() < '5.3');
                         <p class="description">
                             <?php _e('It works with PHP 4.0.5 or later. <strong>This version is no longer supported since February 1, 2014.</strong>') ?>
                             <a target="_blank" href="https://michelf.ca/projects/php-markdown/extra/">Website</a>
+                        </p>
+                    </td>
+                </tr>
+                <tr valign="top">
+                    <th scope="row"><?php _e('Markdown Extensions', 'mm4d') ?></th>
+                    <td>
+                        <input class="large-text" type="text" name="mm4d_extensions" value="<?= get_option('mm4d_extensions') ?>" title="markdown extensions">
+                        <p class="description">
+                            <?php _e('e.g. txt,md,markdown,mdown', 'mm4d') ?>
+                            <br>
+                            <?php _e('Space is not allowed.', 'mm4d') ?>
                         </p>
                     </td>
                 </tr>

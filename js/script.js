@@ -50,7 +50,7 @@ jQuery(function ($) {
                 var $ul = $('<ul>');
                 _.forEach(response.entries, function (entry) {
                     var extension = entry.name.substr(entry.name.lastIndexOf('.') + 1);
-                    if (entry['.tag'] == 'file' && ['txt', 'md', 'markdown', 'mdown'].indexOf(extension) === -1) {
+                    if (entry['.tag'] == 'file' && $('#mm4d_extensions').val().split(',').indexOf(extension) === -1) {
                         return true;
                     }
                     $ul.append(template({

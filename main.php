@@ -27,6 +27,7 @@ class MytoryMarkdownForDropbox
         'account_id',
         'markdown_engine',
         'code',
+        'extensions',
     );
     private $markdown;
 
@@ -40,7 +41,7 @@ class MytoryMarkdownForDropbox
         add_action('wp_ajax_mm4d_get_converted_content', array($this, 'getConvertedContent'));
         add_action('wp_ajax_mm4d_delete_options', array($this, 'deleteOptions'));
         register_activation_hook(__FILE__, array($this, 'activate'));
-        $this->setDefaultMarkdownEngine();
+        $this->setDefaultOptions();
         $this->initMarkdownObject();
     }
 
@@ -51,7 +52,7 @@ class MytoryMarkdownForDropbox
 
     function activate()
     {
-        $this->setDefaultMarkdownEngine();
+        $this->setDefaultOptions();
     }
 
     function deleteOptions()
@@ -114,7 +115,15 @@ class MytoryMarkdownForDropbox
 
         foreach ($this->optionKeys as $key) {
             register_setting('mm4d', 'mm4d_' . $key);
+            register_setting('mm4d', 'mm4d_extensions', array(
+                'sanitize_callback' => array($this, 'removeSpace')
+            ));
         }
+    }
+
+    function removeSpace($string)
+    {
+        return preg_replace('/ +/', '', $string);
     }
 
     function printSettingsPage()
@@ -273,15 +282,18 @@ class MytoryMarkdownForDropbox
         return $content;
     }
 
-    private function setDefaultMarkdownEngine()
+    private function setDefaultOptions()
     {
-        if (get_option('mm4d_markdown_engine')) {
-            return;
+        if (!get_option('mm4d_markdown_engine')) {
+            if (phpversion() >= '5.3') {
+                update_option('mm4d_markdown_engine', 'parsedown');
+            } else {
+                update_option('mm4d_markdown_engine', 'markdownExtra');
+            }
         }
-        if (phpversion() >= '5.3') {
-            update_option('mm4d_markdown_engine', 'parsedown');
-        } else {
-            update_option('mm4d_markdown_engine', 'markdownExtra');
+
+        if (!get_option('mm4d_extensions')) {
+            update_option('mm4d_extensions', 'txt,md,markdown,mdown');
         }
     }
 
