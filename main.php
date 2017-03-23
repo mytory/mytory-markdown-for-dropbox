@@ -68,7 +68,11 @@ class MytoryMarkdownForDropbox
             return;
         }
         wp_enqueue_script('dropbox-sdk', 'https://unpkg.com/dropbox/dist/Dropbox-sdk.min.js', array(), null, true);
-        wp_enqueue_script('mm4d-script', plugins_url('js/script.js', __FILE__), array('dropbox-sdk', 'underscore'),
+        wp_enqueue_script('remodal', plugins_url('js-lib/remodal/remodal.min.js', __FILE__), array(), null, true);
+        wp_enqueue_style('remodal', plugins_url('js-lib/remodal/remodal.css', __FILE__));
+        wp_enqueue_style('remodal-theme', plugins_url('js-lib/remodal/remodal-default-theme.css', __FILE__));
+        wp_enqueue_script('mm4d-script', plugins_url('js/script.js', __FILE__),
+            array('dropbox-sdk', 'underscore', 'remodal'),
             $this->version, true);
     }
 
@@ -136,11 +140,10 @@ class MytoryMarkdownForDropbox
     function getConvertedContent()
     {
         $id = $_POST['id'];
-        $response = array();
         if (!$content = $this->getFileContent($id)) {
             echo json_encode($this->error);
         } else {
-            $response['content'] = $this->convert($content);
+            $response = $this->convert($content);
             echo json_encode($response);
         }
         die();
@@ -204,7 +207,18 @@ class MytoryMarkdownForDropbox
 
     private function convert($md_content)
     {
-        return $this->markdown->convert($md_content);
+        $content = $this->markdown->convert($md_content);
+        $post = array();
+        $matches = array();
+        preg_match('/<h1>(.*)<\/h1>/', $content, $matches);
+        if (!empty($matches)) {
+            $post['post_title'] = $matches[1];
+        } else {
+            $post['post_title'] = false;
+        }
+        $post['post_content'] = preg_replace('/<h1>(.*)<\/h1>/', '', $content, 1);
+
+        return $post;
     }
 
     private function getAccessTokenByCode()

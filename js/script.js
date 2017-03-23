@@ -1,15 +1,6 @@
-// trigger append event when append.
-(function ($) {
-    var origAppend = $.fn.append;
-
-    $.fn.append = function () {
-        return origAppend.apply(this, arguments).trigger("append");
-    };
-})(jQuery);
-
-
 jQuery(function ($) {
-    var dropbox;
+    var dropbox, modal;
+
     function initRevoke() {
         $('.js-mm4d-revoke').click(function () {
             if (!confirm('Really?')) {
@@ -38,9 +29,16 @@ jQuery(function ($) {
         }
     }
 
+    function initModal() {
+        var $remodal = $('[data-remodal-id=modal]');
+        if ($remodal.length > 0) {
+            modal = $remodal.remodal();
+        }
+    }
+
     function drawList(path, dropbox) {
-        var $content = $('#TB_ajaxContent');
-        var $title = $('#TB_ajaxWindowTitle');
+        var $content = $('.js-dropbox-list-content');
+        var $title = $('.js-dropbox-list-title');
         var template = _.template($('#template-mm4d-li').html());
         dropbox.filesListFolder({path: path})
             .then(function (response) {
@@ -69,22 +67,25 @@ jQuery(function ($) {
             });
     }
 
-    function initFirstOpen() {
-        $('body').one('append', '#TB_window', function (e) {
+    function initDropboxListOpen() {
+        $('.js-open-dropbox-list').click(function () {
             drawList('', dropbox);
-            initSelect();
+            modal.open();
         });
     }
 
     function initSelect() {
-        $('#TB_window').on('click', '.js-mm4d-select', function (e) {
-            selectFile(this);
+        $('.js-dropbox-list').on('click', '.js-mm4d-select', function (e) {
+            setConvertedContent(this);
+            modal.close();
         });
     }
 
-    function selectFile(el) {
-        var id = $(el).data('id');
-        $('#mm4d-path').val(id);
+    function setConvertedContent(el) {
+        var id = $(el).data('id'),
+            path = $(el).data('path');
+        $('#mm4d-path').val(path);
+        $('#mm4d-id').val(id);
         $.post(ajaxurl, {
             action: 'mm4d_get_converted_content',
             id: id
@@ -92,12 +93,34 @@ jQuery(function ($) {
             if (typeof response['is_error'] != 'undefined' && response['is_error'] == true) {
                 alert(response.msg);
             } else {
-                console.log(response);
+                setContent(response);
             }
         }, 'json');
     }
 
+    function setContent(obj) {
+        if (obj.post_title) {
+            $('#title').val(obj.post_title);
+            $('#title-prompt-text').addClass('screen-reader-text');
+        }
+        if ($('#content').is(':visible')) {
+
+            // text mode
+            $('#content').val(obj.post_content);
+        } else {
+
+            // wysiwyg mode
+            if (tinymce.getInstanceById) {
+                tinymce.getInstanceById('content').setContent(obj.post_content);
+            } else {
+                tinymce.get('content').setContent(obj.post_content);
+            }
+        }
+    }
+
     initRevoke();
     initDropbox();
-    initFirstOpen();
+    initModal();
+    initDropboxListOpen();
+    initSelect();
 });
