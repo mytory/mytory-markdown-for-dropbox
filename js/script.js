@@ -144,7 +144,7 @@ jQuery(function ($) {
                     });
                     setConvertedContent(obj);
                 } else {
-                    alert('the file has not modified.');
+                    alert('The file has not modified.');
                 }
             }).catch(function (data) {
                 alert(data.response.body.error_summary);
@@ -156,7 +156,7 @@ jQuery(function ($) {
     function setConvertedContent(obj) {
         $.post(ajaxurl, {
             action: 'mm4d_get_converted_content',
-            id: obj.id
+            id: obj.id || obj.path
         }, function (response) {
             if (typeof response['is_error'] != 'undefined' && response['is_error'] == true) {
                 alert(response.msg);
