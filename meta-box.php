@@ -1,12 +1,22 @@
 <input type="hidden" id="mm4d_access_token" value="<?= get_option('mm4d_access_token') ?>">
 <input type="hidden" id="mm4d_extensions" value="<?= get_option('mm4d_extensions') ?>">
 
+<?php if (!get_option('mm4d_access_token')) { ?>
+    <p>
+        <a href="<?php menu_page_url('mm4d') ?>">
+            <?php _e('You need to sign in to Dropbox and grant this plugin access to your Dropbox files', 'mm4d') ?>
+        </a>
+    </p>
+<?php } ?>
+
 <table class="form-table">
     <tr>
         <th scope="row"><label for="mm4d-path"><?php _e('File', 'mm4d') ?></label></th>
         <td>
-            <input type="button" class="button  js-open-dropbox-list"
-                   value="<?php esc_attr_e(__('Select')) ?>" title="Dropbox">
+            <?php if (get_option('mm4d_access_token')) { ?>
+                <input type="button" class="button  js-open-dropbox-list"
+                       value="<?php esc_attr_e(__('Select')) ?>" title="Dropbox">
+            <?php } ?>
             <input readonly type="text" name="_mm4d_path" id="mm4d-path" class="regular-text" value="<?= $mm4d_path ?>"
                    title="path">
 
@@ -15,14 +25,16 @@
                    title="revision">
         </td>
     </tr>
-    <tr>
-        <th><?php _e('Update') ?></th>
-        <td>
-            <button type="button" class="button js-mm4d-update">
-                <?php _e('Update Editor Content', 'mm4d') ?>
-            </button>
-        </td>
-    </tr>
+    <?php if (get_option('mm4d_access_token')) { ?>
+        <tr>
+            <th><?php _e('Update') ?></th>
+            <td>
+                <button type="button" class="button js-mm4d-update">
+                    <?php _e('Update Editor Content', 'mm4d') ?>
+                </button>
+            </td>
+        </tr>
+    <?php } ?>
 </table>
 
 
@@ -55,8 +67,9 @@
 
 <script type="text/template" id="template-mm4d-li">
     <li class="<%- tag %>">
-        <button class="u-button-like-text  dropbox-item  <%- tag == 'folder' ? 'js-mm4d-change-directory' : 'js-mm4d-select-file' %>"
-                data-id="<%- id %>" data-path="<%- path %>" data-rev="<%- rev %>">
+        <button
+            class="u-button-like-text  dropbox-item  <%- tag == 'folder' ? 'js-mm4d-change-directory' : 'js-mm4d-select-file' %>"
+            data-id="<%- id %>" data-path="<%- path %>" data-rev="<%- rev %>">
             <% if (tag == 'folder') { %>
             <span class="dashicons dashicons-category"></span>
             <% } %>

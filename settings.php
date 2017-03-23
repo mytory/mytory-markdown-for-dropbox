@@ -14,27 +14,33 @@ $is_legacy_php = (phpversion() < '5.3');
         'response_type' => 'code',
     ));
     ?>
-    <p>
-        <?php if (get_option('mm4d_code')) { ?>
+    <?php if (get_option('mm4d_code')) { ?>
+        <p>
             <button type="button" class="button  js-mm4d-revoke">
                 <?php _e('Revoke', 'mm4d') ?>
             </button>
-        <?php } else { ?>
-            <a target="_blank" class="button  button-primary"
+        </p>
+    <?php } else { ?>
+        <p><?php _e('Get code from Dropbox and paste it. Click button below.', 'mm4d') ?></p>
+        <p>
+            <a target="_blank" class="button"
                href="https://www.dropbox.com/oauth2/authorize?<?= $query_string ?>">
                 <?php _e('Get Dropbox Code', 'mm4d') ?>
             </a>
-        <?php } ?>
-    </p>
+        </p>
+    <?php } ?>
 
     <form method="post" action="options.php" id="mm4d-form">
         <?php
         settings_fields('mm4d');
         do_settings_sections('mm4d');
         foreach ($this->optionKeys as $key) {
-            if (in_array($key, array('mm4d_code', 'mm4d_markdown_engine', 'extensions'))) { continue; }
+            if (in_array($key, array('mm4d_code', 'mm4d_markdown_engine', 'extensions'))) {
+                continue;
+            }
             ?>
-            <input type="hidden" id="mm4d_<?= $key ?>" name="mm4d_<?= $key ?>" value="<?= get_option('mm4d_' . $key) ?>">
+            <input type="hidden" id="mm4d_<?= $key ?>" name="mm4d_<?= $key ?>"
+                   value="<?= get_option('mm4d_' . $key) ?>">
         <?php } ?>
         <table class="form-table" <?= (get_option('mm4d_access_token')) ? 'hidden' : '' ?>>
             <tr valign="top">
@@ -87,11 +93,14 @@ $is_legacy_php = (phpversion() < '5.3');
                 <tr valign="top">
                     <th scope="row"><?php _e('Markdown Extensions', 'mm4d') ?></th>
                     <td>
-                        <input class="large-text" type="text" name="mm4d_extensions" value="<?= get_option('mm4d_extensions') ?>" title="markdown extensions">
+                        <input class="large-text" type="text" name="mm4d_extensions"
+                               value="<?= get_option('mm4d_extensions') ?>" title="markdown extensions">
+
                         <p class="description">
                             <?php _e('e.g. txt,md,markdown,mdown', 'mm4d') ?>
                             <br>
-                            <?php _e('Space is not allowed.', 'mm4d') ?>
+                            <?php _e('When selecting a file, only files with that extension are displayed in the list.', 'mm4d') ?>
+                            <?php _e('Spaces are not allowed.', 'mm4d') ?>
                         </p>
                     </td>
                 </tr>
