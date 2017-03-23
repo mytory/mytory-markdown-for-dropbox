@@ -105,7 +105,6 @@ jQuery(function ($) {
                 include_has_explicit_shared_members: false
             }).then(function (file) {
                 if (file.rev != obj.rev) {
-                    console.log(file.rev, obj.rev, (file.rev == obj.rev));
                     setFileMetadata({
                         id: file.id,
                         path: file.path_display,
