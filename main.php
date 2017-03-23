@@ -36,6 +36,7 @@ class MytoryMarkdownForDropbox
         add_action('plugins_loaded', array($this, 'init'));
         add_action('add_meta_boxes', array($this, 'metaBox'));
         add_action('admin_menu', array($this, 'addMenu'));
+        add_action('admin_menu', array($this, 'addMigrateFromMytoryMarkdownPlainMenu'));
         add_action('admin_init', array($this, 'registerSettings'));
         add_action('save_post', array($this, 'savePost'));
         add_action('admin_enqueue_scripts', array($this, 'adminEnqueueScripts'));
@@ -261,6 +262,13 @@ class MytoryMarkdownForDropbox
             'Mytory Markdown for Dropbox: <span style="white-space: nowrap;">' . __('Settings', 'mm4d') . '</span>',
             'activate_plugins', 'mm4d',
             array($this, 'printSettingsPage'));
+
+        if (is_plugin_active('mytory-markdown' . DIRECTORY_SEPARATOR . 'main.php') and get_option('mm4d_access_token')) {
+            add_submenu_page('options-general.php', 'Mytory Markdown for Dropbox: ' . __('Migrate from Mytory Markdown', 'mm4d'),
+                'Mytory Markdown for Dropbox: Migrate from Mytory Markdown',
+                'activate_plugins', 'mm4d-migrate',
+                array($this, 'printMigratePage'));
+        }
     }
 
     function registerSettings()
@@ -300,6 +308,39 @@ class MytoryMarkdownForDropbox
         }
 
         include 'settings.php';
+    }
+
+    function printMigratePage() {
+        if (!empty($_POST)) {
+            $change_from = $_POST['change_from'];
+            $change_to = '/Public/';
+
+            foreach ($this->getPostsHasMdUrl() as $post) {
+                $md_url = get_post_meta($post->ID, 'mytory_md_path', true);
+                $md_url = str_replace(array('http://', 'https://'), array('', ''), $md_url);
+                $mm4d_path = str_replace($change_from, $change_to, $md_url);
+                update_post_meta($post->ID, '_mm4d_path', $mm4d_path);
+            }
+            $message = __('Complete.', 'mytory-markdown');
+        }
+
+        include 'extract-common-substring.php';
+        include 'migrate.php';
+    }
+
+    function getPostsHasMdUrl()
+    {
+        $wp_query = new WP_Query(array(
+            'posts_per_page' => -1,
+            'meta_query' => array(
+                array(
+                    'key' => 'mytory_md_path',
+                    'value' => '',
+                    'compare' => '!=',
+                ),
+            ),
+        ));
+        return $wp_query->posts;
     }
 
     function getConvertedContent()
@@ -452,7 +493,6 @@ class MytoryMarkdownForDropbox
             update_option('mm4d_extensions', 'txt,md,markdown,mdown');
         }
     }
-
 }
 
 new MytoryMarkdownForDropbox;
