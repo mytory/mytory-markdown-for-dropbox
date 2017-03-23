@@ -148,7 +148,11 @@ jQuery(function ($) {
                         path: file.path_display,
                         rev: file.rev
                     });
-                    setConvertedContent(obj);
+                    $('.js-mm4d-loading').removeClass('hidden');
+                    setConvertedContent(obj)
+                        .done(function () {
+                            $('.js-mm4d-loading').addClass('hidden');
+                        });
                 } else {
                     alert('The file has not modified.');
                 }

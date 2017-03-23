@@ -32,6 +32,7 @@
                 <button type="button" class="button js-mm4d-update">
                     <?php _e('Update Editor Content', 'mm4d') ?>
                 </button>
+                <span class="js-mm4d-loading  hidden"><?php _e('Loading...') ?></span>
             </td>
         </tr>
     <?php } ?>
