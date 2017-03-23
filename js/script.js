@@ -104,15 +104,21 @@ jQuery(function ($) {
     }
 
     function initSelectFile() {
-        $('.js-dropbox-list').on('click', '.js-mm4d-select-file', function (e) {
+        var $dropboxList = $('.js-dropbox-list');
+        $dropboxList.on('click', '.js-mm4d-select-file', function (e) {
             var obj = {
                 id: $(this).data('id'),
                 path: $(this).data('path'),
                 rev: $(this).data('rev')
             };
-            setConvertedContent(obj);
-            setFileMetadata(obj);
-            modal.close();
+            $dropboxList.addClass('translucent');
+            setConvertedContent(obj)
+                .done(function() {
+                    setFileMetadata(obj);
+                    modal.close();
+                    $dropboxList.removeClass('translucent');
+                });
+
         });
     }
 
@@ -136,7 +142,7 @@ jQuery(function ($) {
                 include_deleted: false,
                 include_has_explicit_shared_members: false
             }).then(function (file) {
-                if (file.rev != obj.rev) {
+                if (file.rev !== obj.rev) {
                     setFileMetadata({
                         id: file.id,
                         path: file.path_display,
@@ -154,7 +160,7 @@ jQuery(function ($) {
     }
 
     function setConvertedContent(obj) {
-        $.post(ajaxurl, {
+        return $.post(ajaxurl, {
             action: 'mm4d_get_converted_content',
             id: obj.id || obj.path
         }, function (response) {
