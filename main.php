@@ -243,8 +243,8 @@ class MytoryMarkdownForDropbox
             }
         }
 
-        curl_setopt($curl, CURLOPT_POST, true);
         if (!empty($post_data)) {
+            curl_setopt($curl, CURLOPT_POST, true);
             curl_setopt($curl, CURLOPT_POSTFIELDS, http_build_query($post_data));
         }
 
