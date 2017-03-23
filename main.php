@@ -45,6 +45,7 @@ class MytoryMarkdownForDropbox
 
         $plugin = plugin_basename(__FILE__);
         add_filter("plugin_action_links_$plugin", array($this, 'pluginSettingPage'));
+        add_action('admin_bar_menu', array($this, 'addAdminBarMenu'), 90);
 
         $this->setDefaultOptions();
         $this->initMarkdownObject();
@@ -60,6 +61,19 @@ class MytoryMarkdownForDropbox
         $settings_link = sprintf('<a href="%s">%s</a>', menu_page_url('mm4d', false), __('Settings'));
         array_unshift($links, $settings_link);
         return $links;
+    }
+
+    function addAdminBarMenu($admin_bar)
+    {
+        $admin_bar->add_menu( array(
+            'id'    => 'my-item',
+            'parent' => 'top-secondary',
+            'title' => 'My Item',
+            'href'  => '#',
+            'meta'  => array(
+                'title' => __('My Item'),
+            ),
+        ) );
     }
 
     function activate()
