@@ -2,7 +2,7 @@
 
 /*
 Plugin Name: Mytory Markdown for Dropbox
-Description: Link with Dropbox, select markdown file. Then, your content will be synced with markdown file in Dropbox. It's Cool.
+Description: Link with Dropbox, select markdown file. Then, post content will be updated. It's Cool.
 Author: mytory
 Version: 1.0.0
 Author URI: https://mytory.net
