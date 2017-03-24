@@ -412,6 +412,10 @@ class MytoryMarkdownForDropbox
                 include 'MM4DParsedown.php';
                 $this->markdown = new MM4DParsedown;
                 break;
+            case 'parsedownExtra':
+                include 'MM4DParsedownExtra.php';
+                $this->markdown = new MM4DParsedownExtra;
+                break;
             case 'markdownExtra':
                 include 'MM4DMarkdownExtra.php';
                 $this->markdown = new MM4DMarkdownExtra;
