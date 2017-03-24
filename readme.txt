@@ -20,9 +20,27 @@ Link with Dropbox, select markdown file. Then, post content will be updated. It'
 * Although your Dropbox file is losed by mistake, the content in Wordpress is not losed.
 * Revoke Dropbox connection whenever you want. It's cause no problem.
 
+= You can use your own Dropbox App instead of my app =
+
+Define `MYTORY_MARKDOWN_APP_KEY`, `MYTORY_MARKDOWN_APP_SECRET` in `wp-config.php`. Then, your Dropbox App will control plugin.
+
+[Create your Dropbox App on this page.](https://www.dropbox.com/developers/apps)
+
 == Screenshots ==
 
 1. Select a file in Dropbox.
 2. File list of Dropbox.
 3. Update on view page.
 4. Select your favorite Markdown Engine.
+
+== Installation ==
+
+1. Upload the plugin files to the `/wp-content/plugins/mytory-markdown-for-dropbox` directory, or install the plugin through the WordPress plugins screen directly.
+1. Activate the plugin through the 'Plugins' screen in WordPress
+1. Go to 'Settings->Mytory Markdown for Dropbox Settings' screen and link with your Dropbox account.
+
+== Changelog ==
+
+= 1.0 =
+
+Initial version.
