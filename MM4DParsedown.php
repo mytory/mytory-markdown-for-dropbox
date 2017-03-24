@@ -6,7 +6,9 @@ class MM4DParsedown
 
     function __construct()
     {
-        include 'Parsedown.php';
+        if (!class_exists('Parsedown')) {
+            include 'Parsedown.php';
+        }
         $this->markdown = new Parsedown();
         $this->markdown->setUrlsLinked(false);
     }

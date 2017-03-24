@@ -4,7 +4,9 @@ class MM4DMarkdownExtra
 {
     function __construct()
     {
-        include 'markdown.php';
+        if (!defined('MARKDOWN_PARSER_CLASS')) {
+            include 'markdown.php';
+        }
     }
 
     public function convert($md_content)
