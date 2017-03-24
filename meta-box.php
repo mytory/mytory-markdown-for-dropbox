@@ -20,6 +20,8 @@
             <input readonly type="text" name="_mm4d_path" id="mm4d-path" class="regular-text" value="<?= $mm4d_path ?>"
                    title="path">
 
+            <p><?php _e('First h1 will be title.', 'mm4d') ?></p>
+
             <input type="hidden" name="_mm4d_id" id="mm4d-id" class="large-text" value="<?= $mm4d_id ?>" title="id">
             <input type="hidden" name="_mm4d_rev" id="mm4d-rev" class="large-text" value="<?= $mm4d_rev ?>"
                    title="revision">
