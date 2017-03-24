@@ -40,7 +40,7 @@
 
 
 <p>
-    <?php _e('Please let me know about bugs, your ideas, etc!') ?>
+    <?php _e('Please let me know about bugs, your ideas, etc!', 'mm4d') ?>
     <a href="mailto:mail@mytory.net">Email</a>
     |
     <a target="_blank" href="https://twitter.com/mytory">Twitter</a>

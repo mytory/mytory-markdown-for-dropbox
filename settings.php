@@ -110,7 +110,7 @@ $is_legacy_php = (phpversion() < '5.3');
                         </p>
 
                         <p class="description">
-                            <?php _e('It works with PHP 4.0.5 or later. <strong>This version is no longer supported since February 1, 2014.</strong>') ?>
+                            <?php _e('It works with PHP 4.0.5 or later. <strong>This version is no longer supported since February 1, 2014.</strong>', 'mm4d') ?>
                             <a target="_blank" href="https://michelf.ca/projects/php-markdown/extra/">Website</a>
                         </p>
 

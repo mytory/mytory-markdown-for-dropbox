@@ -55,7 +55,7 @@ class MytoryMarkdownForDropbox
 
     function init()
     {
-        load_plugin_textdomain('mm4d', false, 'lang');
+        load_plugin_textdomain('mm4d', false, dirname(plugin_basename(__FILE__)) . '/lang');
     }
 
     function pluginSettingPage($links)

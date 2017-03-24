@@ -1,0 +1,213 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: 1.0.0\n"
+"POT-Creation-Date: 2017-03-24 18:28+0900\n"
+"PO-Revision-Date: 2017-03-24 18:33+0900\n"
+"Last-Translator: An, Hyeong-woo <mytory@gmail.com>\n"
+"Language-Team: mytory <mail@mytory.net>\n"
+"Language: ko_KR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.5.4\n"
+"X-Poedit-KeywordsList: _;gettext;gettext_noop;__;_e\n"
+"X-Poedit-Basepath: .\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-SearchPath-0: /home/mytory/workspace/wordpress/wp-content/plugins/"
+"mytory-markdown-for-dropbox\n"
+
+#: /home/mytory/workspace/wordpress/wp-content/plugins/mytory-markdown-for-dropbox/meta-box.php:7
+msgid ""
+"You need to sign in to Dropbox and grant this plugin access to your Dropbox "
+"files"
+msgstr ""
+"드롭박스에 로그인해서 연결해 주세요. 그래야 드롭박스에 있는 파일을 포스트와 "
+"연결할 수 있습니다."
+
+#: /home/mytory/workspace/wordpress/wp-content/plugins/mytory-markdown-for-dropbox/meta-box.php:14
+msgid "File"
+msgstr "파일"
+
+#: /home/mytory/workspace/wordpress/wp-content/plugins/mytory-markdown-for-dropbox/meta-box.php:18
+msgid "Select"
+msgstr "선택"
+
+#: /home/mytory/workspace/wordpress/wp-content/plugins/mytory-markdown-for-dropbox/meta-box.php:30
+#: /home/mytory/workspace/wordpress/wp-content/plugins/mytory-markdown-for-dropbox/main.php:93
+msgid "Update"
+msgstr "갱신"
+
+#: /home/mytory/workspace/wordpress/wp-content/plugins/mytory-markdown-for-dropbox/meta-box.php:33
+msgid "Update Editor Content"
+msgstr "에디터 내용 갱신"
+
+#: /home/mytory/workspace/wordpress/wp-content/plugins/mytory-markdown-for-dropbox/meta-box.php:35
+msgid "Loading..."
+msgstr "로딩중..."
+
+#: /home/mytory/workspace/wordpress/wp-content/plugins/mytory-markdown-for-dropbox/meta-box.php:43
+msgid "Please let me know about bugs, your ideas, etc!"
+msgstr "버그를 알려 주시거나, 개선 사항을 제안해 주세요."
+
+#: /home/mytory/workspace/wordpress/wp-content/plugins/mytory-markdown-for-dropbox/meta-box.php:52
+msgid "Please Rate and Review"
+msgstr "별점 5개 부탁합니다. 한글 리뷰도 환영!"
+
+#: /home/mytory/workspace/wordpress/wp-content/plugins/mytory-markdown-for-dropbox/meta-box.php:57
+msgid "Donate"
+msgstr "후원"
+
+#: /home/mytory/workspace/wordpress/wp-content/plugins/mytory-markdown-for-dropbox/settings.php:5
+#: /home/mytory/workspace/wordpress/wp-content/plugins/mytory-markdown-for-dropbox/main.php:63
+#: /home/mytory/workspace/wordpress/wp-content/plugins/mytory-markdown-for-dropbox/main.php:260
+#: /home/mytory/workspace/wordpress/wp-content/plugins/mytory-markdown-for-dropbox/main.php:261
+msgid "Settings"
+msgstr "설정"
+
+#: /home/mytory/workspace/wordpress/wp-content/plugins/mytory-markdown-for-dropbox/settings.php:20
+msgid "Revoke"
+msgstr "드롭박스 연결 취소"
+
+#: /home/mytory/workspace/wordpress/wp-content/plugins/mytory-markdown-for-dropbox/settings.php:24
+msgid "Get code from Dropbox and paste it. Click button below."
+msgstr ""
+"드롭박스에서 코드를 가져와서 붙여 넣기 하세요. 아래 버튼을 누르면 코드를 가져"
+"옵니다."
+
+#: /home/mytory/workspace/wordpress/wp-content/plugins/mytory-markdown-for-dropbox/settings.php:28
+msgid "Get Dropbox Code"
+msgstr "드롭박스 코드 얻기"
+
+#: /home/mytory/workspace/wordpress/wp-content/plugins/mytory-markdown-for-dropbox/settings.php:58
+msgid "Markdown Engine"
+msgstr "마크다운 엔진"
+
+#: /home/mytory/workspace/wordpress/wp-content/plugins/mytory-markdown-for-dropbox/settings.php:72
+#, php-format
+msgid "Your PHP version is %s, so cannot use Parsedown."
+msgstr "서버의 PHP 버전이 %s이라 Parsedown을 사용할 수 없습니다."
+
+#: /home/mytory/workspace/wordpress/wp-content/plugins/mytory-markdown-for-dropbox/settings.php:75
+msgid "GitHub Flavored."
+msgstr "GitHub 스타일."
+
+#: /home/mytory/workspace/wordpress/wp-content/plugins/mytory-markdown-for-dropbox/settings.php:76
+#: /home/mytory/workspace/wordpress/wp-content/plugins/mytory-markdown-for-dropbox/settings.php:98
+msgid "PHP 5.3 or later."
+msgstr "PHP 5.3 이상."
+
+#: /home/mytory/workspace/wordpress/wp-content/plugins/mytory-markdown-for-dropbox/settings.php:94
+#, php-format
+msgid "Your PHP version is %s, so cannot use ParsedownExtra."
+msgstr "서버의 PHP 버전이 %s이라 ParsedownExtra를 사용할 수 없습니다."
+
+#: /home/mytory/workspace/wordpress/wp-content/plugins/mytory-markdown-for-dropbox/settings.php:97
+msgid "An extension of Parsedown that adds support for Markdown Extra."
+msgstr "Markdown Extra 지원을 추가한 Parsedown의 확장."
+
+#: /home/mytory/workspace/wordpress/wp-content/plugins/mytory-markdown-for-dropbox/settings.php:113
+msgid ""
+"It works with PHP 4.0.5 or later. <strong>This version is no longer "
+"supported since February 1, 2014.</strong>"
+msgstr ""
+"PHP 4.0.5 이상에서 작동합니다. <strong>이 버전은 2014년 2월 1일 이후로 더이"
+"상 업데이트하지 않습니다.</strong>"
+
+#: /home/mytory/workspace/wordpress/wp-content/plugins/mytory-markdown-for-dropbox/settings.php:119
+#, php-format
+msgid "Your PHP version is %s"
+msgstr "현재 PHP 버전은 %s입니다."
+
+#: /home/mytory/workspace/wordpress/wp-content/plugins/mytory-markdown-for-dropbox/settings.php:125
+msgid "Markdown File Extensions"
+msgstr "마크다운 파일 확장자"
+
+#: /home/mytory/workspace/wordpress/wp-content/plugins/mytory-markdown-for-dropbox/settings.php:131
+msgid "e.g. txt,md,markdown,mdown"
+msgstr "예. txt,md,markdown,mdown"
+
+#: /home/mytory/workspace/wordpress/wp-content/plugins/mytory-markdown-for-dropbox/settings.php:133
+msgid ""
+"When selecting a file, only files with that extension are displayed in the "
+"list."
+msgstr "파일을 고를 때, 해당 확장자의 파일만 목록에 표시합니다."
+
+#: /home/mytory/workspace/wordpress/wp-content/plugins/mytory-markdown-for-dropbox/settings.php:134
+msgid "Spaces are not allowed."
+msgstr "공백 문자 금지."
+
+#: /home/mytory/workspace/wordpress/wp-content/plugins/mytory-markdown-for-dropbox/main.php:161
+msgid "No change."
+msgstr "바뀐 게 없습니다. "
+
+#: /home/mytory/workspace/wordpress/wp-content/plugins/mytory-markdown-for-dropbox/main.php:266
+msgid "Migrate from Mytory Markdown"
+msgstr "Mytory Markdown에서 이전해 오기"
+
+#: /home/mytory/workspace/wordpress/wp-content/plugins/mytory-markdown-for-dropbox/main.php:299
+msgid "The code is invalid. "
+msgstr "잘못된 코드입니다."
+
+#: /home/mytory/workspace/wordpress/wp-content/plugins/mytory-markdown-for-dropbox/main.php:328
+msgid "Complete."
+msgstr "완료."
+
+#: /home/mytory/workspace/wordpress/wp-content/plugins/mytory-markdown-for-dropbox/main.php:395
+msgid "Network Error! HTTP STATUS is "
+msgstr "네트워크 에러! HTTPS STATUS"
+
+#: /home/mytory/workspace/wordpress/wp-content/plugins/mytory-markdown-for-dropbox/main.php:400
+msgid "Network Error! Maybe, connection error."
+msgstr "네트워크 에러! 아마도 연결 문제인 것 같습니다."
+
+#: /home/mytory/workspace/wordpress/wp-content/plugins/mytory-markdown-for-dropbox/migrate.php:3
+#, fuzzy
+msgid "Migrate from Mytory Markdown to Mytory Markdown for Dropbox"
+msgstr "Mytory Markdown에서 이전해 오기"
+
+#: /home/mytory/workspace/wordpress/wp-content/plugins/mytory-markdown-for-dropbox/migrate.php:9
+msgid "Close."
+msgstr "닫기."
+
+#: /home/mytory/workspace/wordpress/wp-content/plugins/mytory-markdown-for-dropbox/migrate.php:42
+msgid "URL corresponding to Dropbox folder"
+msgstr "드롭박스 폴더에 해당하는 URL 부분"
+
+#: /home/mytory/workspace/wordpress/wp-content/plugins/mytory-markdown-for-dropbox/migrate.php:45
+msgid "Change from"
+msgstr "여기에서"
+
+#: /home/mytory/workspace/wordpress/wp-content/plugins/mytory-markdown-for-dropbox/migrate.php:48
+msgid "Above is a string that extracted common substring from markdown paths."
+msgstr ""
+
+#: /home/mytory/workspace/wordpress/wp-content/plugins/mytory-markdown-for-dropbox/migrate.php:50
+msgid "Please edit appropriately and convert."
+msgstr "적절하게 수정한 뒤 변환하세요."
+
+#: /home/mytory/workspace/wordpress/wp-content/plugins/mytory-markdown-for-dropbox/migrate.php:56
+msgid "Dropbox folder"
+msgstr "드롭박스 폴더"
+
+#: /home/mytory/workspace/wordpress/wp-content/plugins/mytory-markdown-for-dropbox/migrate.php:59
+msgid "Change to"
+msgstr "여기로"
+
+#: /home/mytory/workspace/wordpress/wp-content/plugins/mytory-markdown-for-dropbox/migrate.php:65
+msgid "Convert"
+msgstr "변환"
+
+#: /home/mytory/workspace/wordpress/wp-content/plugins/mytory-markdown-for-dropbox/migrate.php:70
+msgid "Reference: Your Markdown URL List"
+msgstr "참고: 마크다운 URL 목록"
+
+#: /home/mytory/workspace/wordpress/wp-content/plugins/mytory-markdown-for-dropbox/migrate.php:76
+msgid "Edit"
+msgstr "편집"
+
+#: /home/mytory/workspace/wordpress/wp-content/plugins/mytory-markdown-for-dropbox/migrate.php:81
+msgid "Result: "
+msgstr "결과:"
+
+#~ msgid "Only one step can be undo."
+#~ msgstr "1단계만 되돌릴 수 있습니다."
