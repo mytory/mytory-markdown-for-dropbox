@@ -122,7 +122,7 @@ $is_legacy_php = (phpversion() < '5.3');
                 </tr>
 
                 <tr valign="top">
-                    <th scope="row"><?php _e('Markdown Extensions', 'mm4d') ?></th>
+                    <th scope="row"><?php _e('Markdown File Extensions', 'mm4d') ?></th>
                     <td>
                         <input class="large-text" type="text" name="mm4d_extensions"
                                value="<?= get_option('mm4d_extensions') ?>" title="markdown extensions">
