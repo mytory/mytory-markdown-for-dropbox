@@ -1,6 +1,6 @@
 <?php global $wpdb ?>
 <div class="wrap">
-    <h2><?php _e('Migrate from Mytory Markdown Plain to Mytory Markdown for Dropbox', 'mm4d') ?></h2>
+    <h2><?php _e('Migrate from Mytory Markdown to Mytory Markdown for Dropbox', 'mm4d') ?></h2>
 
     <?php
     if (!empty($message)) { ?>
