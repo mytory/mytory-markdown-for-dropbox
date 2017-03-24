@@ -137,7 +137,7 @@ jQuery(function ($) {
             };
 
             dropbox.filesAlphaGetMetadata({
-                path: obj.id || obj.path,
+                path: obj.path,
                 include_media_info: false,
                 include_deleted: false,
                 include_has_explicit_shared_members: false
@@ -166,7 +166,7 @@ jQuery(function ($) {
     function setConvertedContent(obj) {
         return $.post(ajaxurl, {
             action: 'mm4d_get_converted_content',
-            id: obj.id || obj.path
+            path: obj.path
         }, function (response) {
             if (typeof response['is_error'] != 'undefined' && response['is_error'] == true) {
                 alert(response.msg);

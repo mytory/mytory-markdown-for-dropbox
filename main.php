@@ -350,8 +350,8 @@ class MytoryMarkdownForDropbox
 
     function getConvertedContent()
     {
-        $id = $_POST['id'];
-        if (!$content = $this->getFileContent($id)) {
+        $path = $_POST['path'];
+        if (!$content = $this->getFileContent($path)) {
             echo json_encode($this->error);
         } else {
             $response = $this->convert($content);
@@ -375,6 +375,13 @@ class MytoryMarkdownForDropbox
         );
 
         $content = $this->accessDropbox($endpoint, $custom_header);
+
+        if ($this->error['is_error']) {
+            if ($content) {
+                $this->error['msg'] = $content;
+                $content = false;
+            }
+        }
 
         return $content;
     }
