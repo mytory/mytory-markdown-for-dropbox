@@ -36,7 +36,6 @@ class MytoryMarkdownForDropbox
         add_action('plugins_loaded', array($this, 'init'));
         add_action('add_meta_boxes', array($this, 'metaBox'));
         add_action('admin_menu', array($this, 'addMenu'));
-        add_action('admin_menu', array($this, 'addMigrateFromMytoryMarkdownPlainMenu'));
         add_action('admin_init', array($this, 'registerSettings'));
         add_action('save_post', array($this, 'savePost'));
         add_action('admin_enqueue_scripts', array($this, 'adminEnqueueScripts'));
@@ -313,15 +312,21 @@ class MytoryMarkdownForDropbox
     function printMigratePage() {
         if (!empty($_POST)) {
             $change_from = $_POST['change_from'];
-            $change_to = '/Public/';
+            $change_to = $_POST['change_to'];
 
-            foreach ($this->getPostsHasMdUrl() as $post) {
-                $md_url = get_post_meta($post->ID, 'mytory_md_path', true);
-                $md_url = str_replace(array('http://', 'https://'), array('', ''), $md_url);
-                $mm4d_path = str_replace($change_from, $change_to, $md_url);
-                update_post_meta($post->ID, '_mm4d_path', $mm4d_path);
+            if ($change_from and $change_to) {
+                foreach ($this->getPostsHasMdUrl() as $post) {
+                    $md_url = get_post_meta($post->ID, 'mytory_md_path', true);
+
+                    // Is there the changer_from string?
+                    if (strstr($md_url, $change_from)) {
+                        $md_url = str_replace(array('http://', 'https://'), array('', ''), $md_url);
+                        $mm4d_path = str_replace($change_from, $change_to, $md_url);
+                        update_post_meta($post->ID, '_mm4d_path', $mm4d_path);
+                    }
+                }
+                $message = __('Complete.', 'mytory-markdown');
             }
-            $message = __('Complete.', 'mytory-markdown');
         }
 
         include 'extract-common-substring.php';
