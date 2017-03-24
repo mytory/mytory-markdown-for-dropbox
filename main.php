@@ -142,12 +142,12 @@ class MytoryMarkdownForDropbox
 
         $metadata = json_decode($this->accessDropbox('https://api.dropboxapi.com/2/files/get_metadata', array(
             "Content-Type: application/json",
-        ), array(
+        ), json_encode(array(
             "path" => $mm4d_path,
             "include_media_info" => false,
             "include_deleted" => false,
             "include_has_explicit_shared_members" => false
-        )));
+        ))));
 
         if (!empty($metadata->error_summary)) {
             echo json_encode(array(
@@ -443,10 +443,10 @@ class MytoryMarkdownForDropbox
     {
         $response = $this->accessDropbox('https://api.dropboxapi.com/oauth2/token', array(
             'Content-Type: application/x-www-form-urlencoded'
-        ), array(
+        ), http_build_query(array(
             'code' => get_option('mm4d_code'),
             'grant_type' => 'authorization_code',
-        ), array(
+        )), array(
             CURLOPT_USERPWD => MYTORY_MARKDOWN_APP_KEY . ':' . MYTORY_MARKDOWN_APP_SECRET,
             CURLOPT_HTTPAUTH => CURLAUTH_BASIC,
         ));
@@ -478,7 +478,7 @@ class MytoryMarkdownForDropbox
 
         if (!empty($post_data)) {
             curl_setopt($curl, CURLOPT_POST, true);
-            curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($post_data));
+            curl_setopt($curl, CURLOPT_POSTFIELDS, $post_data);
         }
 
         if (get_option('mm4d_access_token')) {
