@@ -8,6 +8,7 @@ class MM4DParsedown
     {
         include 'Parsedown.php';
         $this->markdown = new Parsedown();
+        $this->markdown->setUrlsLinked(false);
     }
 
     public function convert($md_content)
