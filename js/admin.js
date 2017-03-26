@@ -211,8 +211,10 @@ jQuery(function ($) {
 
     function setContent(obj) {
 
-        $('#title').val(obj.post_title);
-        $('#title-prompt-text').addClass('screen-reader-text');
+        if (obj.post_title) {
+            $('#title').val(obj.post_title);
+            $('#title-prompt-text').addClass('screen-reader-text');
+        }
 
         if ($('#content').is(':visible')) {
 
