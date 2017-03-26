@@ -38,21 +38,31 @@ jQuery(function ($) {
         }
     }
 
-    function drawList(path, dropbox) {
+    function drawList(path, dropbox, cursor) {
         var $container = $('.js-dropbox-list');
         var $content = $('.js-dropbox-list-content');
         var $title = $('.js-dropbox-list-title');
         var template = _.template($('#template-mm4d-li').html());
+        var filesResultFolderList;
 
         $container.addClass('translucent');
 
-        dropbox.filesListFolder({path: path})
+        if (!cursor) {
+            filesResultFolderList = dropbox.filesListFolder({path: path});
+        } else {
+            filesResultFolderList = dropbox.filesListFolderContinue({cursor: cursor});
+        }
+
+        filesResultFolderList
             .then(function (response) {
                 $title.text(path);
-                $content.html('');
+
+                if (!cursor) {
+                    $content.html('');
+                }
                 var $ul = $('<ul>');
 
-                if (path.length > 1) {
+                if (path && path.length > 1) {
                     $ul.append(template({
                         name: '..',
                         tag: 'folder',
@@ -64,7 +74,7 @@ jQuery(function ($) {
 
                 _.forEach(response.entries, function (entry) {
                     var extension = entry.name.substr(entry.name.lastIndexOf('.') + 1);
-                    if (entry['.tag'] == 'file' && $('#mm4d_extensions').val().split(',').indexOf(extension) === -1) {
+                    if (entry['.tag'] === 'file' && $('#mm4d_extensions').val().split(',').indexOf(extension) === -1) {
                         return true;
                     }
                     $ul.append(template({
@@ -76,17 +86,27 @@ jQuery(function ($) {
                     }));
                 });
                 $ul.appendTo($content);
+
+                if (response.has_more) {
+                    $('<button>', {
+                        type: 'button',
+                        text: 'more',
+                        'data-cursor': response.cursor,
+                        'class': 'js-mm4d-load-more'
+                    }).appendTo($content);
+                }
+
                 $container.removeClass('translucent');
             })
             .catch(function (data) {
-                console.log(data);
+                alert(data.response.body.error_summary);
             });
     }
 
     function getParentPath(path) {
         var pathArray = _.filter(path.split('/'));
         pathArray.pop();
-        if (pathArray.length == 0) {
+        if (pathArray.length === 0) {
             return '';
         } else {
             return '/' + pathArray.join('/');
@@ -125,6 +145,13 @@ jQuery(function ($) {
     function initChangeDirectory() {
         $('.js-dropbox-list').on('click', '.js-mm4d-change-directory', function (e) {
             drawList($(this).data('path'), dropbox);
+        });
+    }
+
+    function initLoadMore() {
+        $('.js-dropbox-list').on('click', '.js-mm4d-load-more', function (e) {
+            $(this).remove();
+            drawList(null, dropbox, $(this).data('cursor'));
         });
     }
 
@@ -183,10 +210,10 @@ jQuery(function ($) {
     }
 
     function setContent(obj) {
-        if (obj.post_title) {
-            $('#title').val(obj.post_title);
-            $('#title-prompt-text').addClass('screen-reader-text');
-        }
+
+        $('#title').val(obj.post_title);
+        $('#title-prompt-text').addClass('screen-reader-text');
+
         if ($('#content').is(':visible')) {
 
             // text mode
@@ -208,5 +235,6 @@ jQuery(function ($) {
     initDropboxListOpen();
     initSelectFile();
     initChangeDirectory();
+    initLoadMore();
     initUpdate();
 });

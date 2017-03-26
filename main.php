@@ -351,7 +351,8 @@ class MytoryMarkdownForDropbox
     function getConvertedContent()
     {
         $path = $_POST['path'];
-        if (!$content = $this->getFileContent($path)) {
+        $content = $this->getFileContent($path);
+        if ($content === false) {
             echo json_encode($this->error);
         } else {
             $response = $this->convert($content);
@@ -436,7 +437,7 @@ class MytoryMarkdownForDropbox
         if (!empty($matches)) {
             $post['post_title'] = html_entity_decode($matches[1], ENT_QUOTES, 'utf-8');
         } else {
-            $post['post_title'] = false;
+            $post['post_title'] = '';
         }
         $post['post_content'] = preg_replace('/<h1>(.*)<\/h1>/', '', $content, 1);
 
