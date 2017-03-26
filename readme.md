@@ -14,12 +14,14 @@ Link with Dropbox, select markdown file. Then, post content will be updated. It'
 
 [youtube https://www.youtube.com/watch?v=fc-ROSH8Eng]
 
+한글 자막 있습니다.
+
 * The plugin connect with Dropbox and link post with a markdown file on Dropbox.
 * Edit the file on your computer and click update button. Then post will be updated.
 * The plugin is compatible with other plugins like shortcode.
-* Other default functions of Wordpress will work. This plugin not disturb default work of Wordpress.
+* Other default functions of Wordpress will work. This plugin do not disturb default work of Wordpress.
 * Although your Dropbox file is losed by mistake, the content in Wordpress is not losed.
-* Revoke Dropbox connection whenever you want. It's cause no problem.
+* Revoke Dropbox connection whenever you want. It will cause no problem.
 
 
 ### You can use your own Dropbox App instead of my app 
@@ -32,16 +34,16 @@ Define `MYTORY_MARKDOWN_APP_KEY`, `MYTORY_MARKDOWN_APP_SECRET` in `wp-config.php
 ## Screenshots 
 
 ### 1. Select a file in Dropbox.
-[missing image]
+![Select a file in Dropbox.](https://ps.w.org/mytory-markdown-for-dropbox/assets/screenshot-1.jpg)
 
 ### 2. File list of Dropbox.
-[missing image]
+![File list of Dropbox.](https://ps.w.org/mytory-markdown-for-dropbox/assets/screenshot-2.jpg)
 
 ### 3. Update on view page.
-[missing image]
+![Update on view page.](https://ps.w.org/mytory-markdown-for-dropbox/assets/screenshot-3.jpg)
 
 ### 4. Select your favorite Markdown Engine.
-[missing image]
+![Select your favorite Markdown Engine.](https://ps.w.org/mytory-markdown-for-dropbox/assets/screenshot-4.jpg)
 
 
 

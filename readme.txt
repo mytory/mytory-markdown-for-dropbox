@@ -13,12 +13,14 @@ Link with Dropbox, select markdown file. Then, post content will be updated. It'
 
 [youtube https://www.youtube.com/watch?v=fc-ROSH8Eng]
 
+한글 자막 있습니다.
+
 * The plugin connect with Dropbox and link post with a markdown file on Dropbox.
 * Edit the file on your computer and click update button. Then post will be updated.
 * The plugin is compatible with other plugins like shortcode.
-* Other default functions of Wordpress will work. This plugin not disturb default work of Wordpress.
+* Other default functions of Wordpress will work. This plugin do not disturb default work of Wordpress.
 * Although your Dropbox file is losed by mistake, the content in Wordpress is not losed.
-* Revoke Dropbox connection whenever you want. It's cause no problem.
+* Revoke Dropbox connection whenever you want. It will cause no problem.
 
 = You can use your own Dropbox App instead of my app =
 
