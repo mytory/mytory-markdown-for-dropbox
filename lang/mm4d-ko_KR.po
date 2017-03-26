@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0.0\n"
-"POT-Creation-Date: 2017-03-27 00:05+0900\n"
-"PO-Revision-Date: 2017-03-27 00:06+0900\n"
+"POT-Creation-Date: 2017-03-27 00:11+0900\n"
+"PO-Revision-Date: 2017-03-27 00:11+0900\n"
 "Last-Translator: An, Hyeong-woo <mytory@gmail.com>\n"
 "Language-Team: mytory <mail@mytory.net>\n"
 "Language: ko_KR\n"
@@ -35,6 +35,10 @@ msgstr "바뀐 게 없습니다. "
 #: /home/mytory/workspace/wordpress/wp-content/plugins/mytory-markdown-for-dropbox/main.php:266
 msgid "Migrate from Mytory Markdown"
 msgstr "Mytory Markdown에서 이전해 오기"
+
+#: /home/mytory/workspace/wordpress/wp-content/plugins/mytory-markdown-for-dropbox/main.php:267
+msgid "Mytory Markdown for Dropbox: Migrate from Mytory Markdown"
+msgstr "Mytory Markdown for Dropbox: Mytory Markdown에서 이전"
 
 #: /home/mytory/workspace/wordpress/wp-content/plugins/mytory-markdown-for-dropbox/main.php:299
 msgid "The code is invalid. "

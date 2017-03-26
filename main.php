@@ -264,7 +264,7 @@ class MytoryMarkdownForDropbox
 
         if (is_plugin_active('mytory-markdown' . DIRECTORY_SEPARATOR . 'main.php') and get_option('mm4d_access_token')) {
             add_submenu_page('options-general.php', 'Mytory Markdown for Dropbox: ' . __('Migrate from Mytory Markdown', 'mm4d'),
-                'Mytory Markdown for Dropbox: Migrate from Mytory Markdown',
+                __('Mytory Markdown for Dropbox: Migrate from Mytory Markdown', 'mm4d'),
                 'activate_plugins', 'mm4d-migrate',
                 array($this, 'printMigratePage'));
         }
