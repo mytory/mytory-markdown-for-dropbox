@@ -335,7 +335,7 @@ class MytoryMarkdownForDropbox
 
     function getPostsHasMdUrl()
     {
-        $wp_query = new WP_Query(array(
+        $the_query = new WP_Query(array(
             'posts_per_page' => -1,
             'meta_query' => array(
                 array(
@@ -345,7 +345,7 @@ class MytoryMarkdownForDropbox
                 ),
             ),
         ));
-        return $wp_query->posts;
+        return $the_query->posts;
     }
 
     function getConvertedContent()
