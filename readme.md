@@ -3,7 +3,7 @@
 **Tags:** markdown, dropbox  
 **Donate link:** https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=QUWVEWJ3N7M4W&lc=GA&item_name=Mytory%20Markdown&currency_code=USD&bn=PP%2dDonationsBF%3abtn_donate_SM%2egif%3aNonHosted  
 **Tested up to:** 4.7.3  
-**Stable tag:** 1.0  
+**Stable tag:** 1.0.1  
 
 Link with Dropbox, select markdown file. Then, post content will be updated. It's Cool.
 
@@ -55,6 +55,11 @@ Define `MYTORY_MARKDOWN_APP_KEY`, `MYTORY_MARKDOWN_APP_SECRET` in `wp-config.php
 
 
 ## Changelog 
+
+
+### 1.0.1 
+
+Apply Dropbox API change.
 
 
 ### 1.0 
