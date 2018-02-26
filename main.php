@@ -214,7 +214,7 @@ class MytoryMarkdownForDropbox
         wp_enqueue_script('remodal', plugins_url('js-lib/remodal/remodal.min.js', __FILE__), array(), null, true);
         wp_enqueue_style('remodal', plugins_url('js-lib/remodal/remodal.css', __FILE__));
         wp_enqueue_style('remodal-theme', plugins_url('js-lib/remodal/remodal-default-theme.css', __FILE__));
-        wp_enqueue_script('mm4d-script', plugins_url('js/admin.js', __FILE__),
+        wp_enqueue_script('mm4d-script', plugins_url('js/bundle.js', __FILE__),
             array('dropbox-sdk', 'underscore', 'remodal'),
             $this->version, true);
         wp_enqueue_style('mm4d-style', plugins_url('style.css', __FILE__));
@@ -223,7 +223,7 @@ class MytoryMarkdownForDropbox
     function enqueueScripts()
     {
         if ((is_single() or is_page()) and current_user_can('edit_post', get_the_ID())) {
-            wp_enqueue_script('mm4d-client', plugins_url('js/client.js', __FILE__),
+            wp_enqueue_script('mm4d-client', plugins_url('js/bundle.js', __FILE__),
                 array('jquery'),
                 $this->version, true);
         }
