@@ -1,0 +1,29 @@
+{
+  "name": "mytory-markdown-for-dropbox",
+  "version": "0.0.1",
+  "description": "Mytory Markdown For Dropbox",
+  "main": "main.php",
+  "dependencies": {
+    "dropbox": "^3.0.5",
+    "remodal": "^1.1.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mytory/mytory-markdown-for-dropbox.git"
+  },
+  "keywords": [
+    "wordpress",
+    "markdown",
+    "mytory"
+  ],
+  "author": "mytory@gmail.com",
+  "license": "GPL-2.0",
+  "bugs": {
+    "url": "https://github.com/mytory/mytory-markdown-for-dropbox/issues"
+  },
+  "homepage": "https://github.com/mytory/mytory-markdown-for-dropbox#readme"
+}
