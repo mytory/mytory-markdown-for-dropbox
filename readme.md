@@ -57,6 +57,12 @@ Define `MYTORY_MARKDOWN_APP_KEY`, `MYTORY_MARKDOWN_APP_SECRET` in `wp-config.php
 ## Changelog 
 
 
+### 1.0.2 
+
+Disable on Gutenberg Editor, and show notice. Please rest assured. You can install Classic Editor Plugin
+to use Mytory Markdown for Dropbox. And... I'll support Gutenberg Editor.
+
+
 ### 1.0.1 
 
 Apply Dropbox API change.
