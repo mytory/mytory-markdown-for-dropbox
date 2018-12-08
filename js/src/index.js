@@ -4,6 +4,15 @@ var Dropbox = require('dropbox').Dropbox;
 jQuery(function ($) {
     var dropbox, modal;
 
+    function detectGutenbergEditor() {
+        if (!document.querySelector('#title')) {
+            document.querySelector('#mm4d .inside')
+                .innerHTML = '<p><i>Mytory Markdown for Dropbox</i> is not yet support Gutenberg Editor. ' +
+                'Please use <a href="https://wordpress.org/plugins/classic-editor/">Classic Editor</a> ' +
+                'before support that.</p>';
+        }
+    }
+
     function initRevoke() {
         $('.js-mm4d-revoke').click(function () {
             if (!confirm('Really?')) {
@@ -234,6 +243,7 @@ jQuery(function ($) {
         }
     }
 
+    detectGutenbergEditor();
     initRevoke();
     initDropbox();
     initModal();
@@ -243,7 +253,6 @@ jQuery(function ($) {
     initLoadMore();
     initUpdate();
 });
-
 
 
 // ==== client ====
