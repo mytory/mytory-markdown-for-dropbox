@@ -2,8 +2,8 @@
 Contributors: mytory
 Tags: markdown, dropbox
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=QUWVEWJ3N7M4W&lc=GA&item_name=Mytory%20Markdown&currency_code=USD&bn=PP%2dDonationsBF%3abtn_donate_SM%2egif%3aNonHosted
-Tested up to: 5.0
-Stable tag: 1.0.2
+Tested up to: 5.2.3
+Stable tag: 1.0.3
 
 Link with Dropbox, select markdown file. Then, post content will be updated. It's Cool.
 
@@ -42,6 +42,10 @@ Define `MYTORY_MARKDOWN_APP_KEY`, `MYTORY_MARKDOWN_APP_SECRET` in `wp-config.php
 1. Go to 'Settings->Mytory Markdown for Dropbox Settings' screen and link with your Dropbox account.
 
 == Changelog ==
+
+= 1.0.3 =
+
+Fixed revoking not work.
 
 = 1.0.2 =
 

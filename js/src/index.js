@@ -5,7 +5,7 @@ jQuery(function ($) {
     var dropbox, modal;
 
     function detectGutenbergEditor() {
-        if (!document.querySelector('#title')) {
+        if (typeof wp !== 'undefined' && typeof wp.blocks !== 'undefined') {
             document.querySelector('#mm4d .inside')
                 .innerHTML = '<p><i>Mytory Markdown for Dropbox</i> is not yet support Gutenberg Editor. ' +
                 'Please use <a href="https://wordpress.org/plugins/classic-editor/">Classic Editor</a> ' +
