@@ -421,6 +421,10 @@ class MytoryMarkdownForDropbox
                 include 'MM4DMarkdownExtra.php';
                 $this->markdown = new MM4DMarkdownExtra;
                 break;
+            case 'multimarkdown':
+                include 'MM4DMultimarkdown.php';
+                $this->markdown = new MM4DMultimarkdown;
+                break;
             default:
                 include 'MM4DMarkdownExtra.php';
                 $this->markdown = new MM4DMarkdownExtra;
@@ -433,13 +437,13 @@ class MytoryMarkdownForDropbox
         $content = $this->markdown->convert($md_content);
         $post = array();
         $matches = array();
-        preg_match('/<h1>(.*)<\/h1>/', $content, $matches);
+        preg_match('/<h1[^>]*>(.*)<\/h1>/', $content, $matches);
         if (!empty($matches)) {
             $post['post_title'] = html_entity_decode($matches[1], ENT_QUOTES, 'utf-8');
         } else {
             $post['post_title'] = '';
         }
-        $post['post_content'] = preg_replace('/<h1>(.*)<\/h1>/', '', $content, 1);
+        $post['post_content'] = preg_replace('/<h1[^>]*>(.*)<\/h1>/', '', $content, 1);
 
         return $post;
     }
@@ -510,6 +514,15 @@ class MytoryMarkdownForDropbox
             update_option('mm4d_extensions', 'txt,md,markdown,mdown');
         }
     }
+
+    public function hasMultimarkdownExecution()
+    {
+    	if (defined('MM4D_MULTIMARKDOWN_EXECUTION')) {
+    		return true;
+	    }
+
+	    return !!`which multimarkdown`;
+    }
 }
 
-new MytoryMarkdownForDropbox;
+$mytoryMarkdownForDropbox = new MytoryMarkdownForDropbox;
