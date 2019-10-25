@@ -22,8 +22,8 @@ class MM4DMultimarkdown
 
     private function getExecution()
     {
-	    if (defined('MM4D_MULTIMARKDOWN_EXECUTION')) {
-		    return MM4D_MULTIMARKDOWN_EXECUTION;
+	    if (defined('MYTORY_MARKDOWN_MULTIMARKDOWN_EXECUTION')) {
+		    return MYTORY_MARKDOWN_MULTIMARKDOWN_EXECUTION;
 	    }
 	    return 'multimarkdown';
     }

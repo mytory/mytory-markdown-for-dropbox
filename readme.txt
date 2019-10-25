@@ -2,8 +2,8 @@
 Contributors: mytory
 Tags: markdown, dropbox
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=QUWVEWJ3N7M4W&lc=GA&item_name=Mytory%20Markdown&currency_code=USD&bn=PP%2dDonationsBF%3abtn_donate_SM%2egif%3aNonHosted
-Tested up to: 5.2.3
-Stable tag: 1.0.3
+Tested up to: 5.2.4
+Stable tag: 1.0.4
 
 Link with Dropbox, select markdown file. Then, post content will be updated. It's Cool.
 
@@ -28,6 +28,15 @@ Define `MYTORY_MARKDOWN_APP_KEY`, `MYTORY_MARKDOWN_APP_SECRET` in `wp-config.php
 
 [Create your Dropbox App on this page.](https://www.dropbox.com/developers/apps)
 
+= You can use Multimarkdown 6 =
+
+You can use the Muitimarkdown if you install it on your server. ((Website)[https://fletcher.github.io/MultiMarkdown-6/])
+
+1. Multimarkdown option will be enabled if a multimarkdown execution is on OS PATH and web server can run it.
+
+2. Otherwise, you can define `MYTORY_MARKDOWN_MULTIMARKDOWN_EXECUTION` constant on `wp-config.php`.
+   ex) `define('MYTORY_MARKDOWN_MULTIMARKDOWN_EXECUTION', '/opt/multimarkdown/bin/multimarkdown');`
+
 == Screenshots ==
 
 1. Select a file in Dropbox.
@@ -42,6 +51,10 @@ Define `MYTORY_MARKDOWN_APP_KEY`, `MYTORY_MARKDOWN_APP_SECRET` in `wp-config.php
 1. Go to 'Settings->Mytory Markdown for Dropbox Settings' screen and link with your Dropbox account.
 
 == Changelog ==
+
+= 1.0.4 =
+
+Added the multimarkdown engine option.
 
 = 1.0.3 =
 

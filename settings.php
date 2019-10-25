@@ -150,14 +150,14 @@ $is_legacy_php = ( phpversion() < '5.3' );
                             <ol>
                                 <li>
                                     <p class="description">
-										<?php _e( 'Multimarkdown option will be enabled if a <code>multimarkdown</code> execution is on OS PATH.' ) ?>
+										<?php _e( 'Multimarkdown option will be enabled if a <code>multimarkdown</code> execution is on OS PATH and web server can run it.' ) ?>
                                     </p>
                                 </li>
                                 <li>
                                     <p class="description">
-										<?php _e( 'Otherwise, you can define <code>MM4D_MULTIMARKDOWN_EXECUTION</code> constant on <code>wp-config.php</code>.' ) ?>
+										<?php _e( 'Otherwise, you can define <code>MYTORY_MARKDOWN_MULTIMARKDOWN_EXECUTION</code> constant on <code>wp-config.php</code>.' ) ?>
                                         <br>
-										<?php _e( "ex) <code>define('MM4D_MULTIMARKDOWN_EXECUTION', '/opt/multimarkdown/bin/multimarkdown');</code>" ) ?>
+										<?php _e( "ex) <code>define('MYTORY_MARKDOWN_MULTIMARKDOWN_EXECUTION', '/opt/multimarkdown/bin/multimarkdown');</code>" ) ?>
                                     </p>
                                 </li>
                             </ol>

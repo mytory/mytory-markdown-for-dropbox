@@ -4,7 +4,7 @@
 Plugin Name: Mytory Markdown for Dropbox
 Description: Link with Dropbox, select markdown file. Then, post content will be updated. It's Cool.
 Author: mytory
-Version: 1.0.3
+Version: 1.0.4
 Author URI: https://mytory.net
 */
 
@@ -517,7 +517,7 @@ class MytoryMarkdownForDropbox
 
     public function hasMultimarkdownExecution()
     {
-    	if (defined('MM4D_MULTIMARKDOWN_EXECUTION')) {
+    	if (defined('MYTORY_MARKDOWN_MULTIMARKDOWN_EXECUTION')) {
     		return true;
 	    }
 
