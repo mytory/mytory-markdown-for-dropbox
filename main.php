@@ -14,7 +14,7 @@ Author URI: https://mytory.net
 
 class MytoryMarkdownForDropbox
 {
-    public $version = '1.0.0';
+    public $version = '1.0.4';
     public $error = array(
         'status' => false,
         'msg' => '',
