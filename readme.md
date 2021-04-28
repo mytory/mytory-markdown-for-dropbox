@@ -2,7 +2,7 @@
 **Contributors:** mytory  
 **Tags:** markdown, dropbox  
 **Donate link:** https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=QUWVEWJ3N7M4W&lc=GA&item_name=Mytory%20Markdown&currency_code=USD&bn=PP%2dDonationsBF%3abtn_donate_SM%2egif%3aNonHosted  
-**Tested up to:** 5.2.4  
+**Tested up to:** 5.7.1  
 **Stable tag:** 1.0.4  
 
 Link with Dropbox, select markdown file. Then, post content will be updated. It's Cool.
@@ -44,16 +44,16 @@ You can use the Muitimarkdown if you install it on your server. ((Website)[https
 ## Screenshots 
 
 ### 1. Select a file in Dropbox.
-![Select a file in Dropbox.](https://ps.w.org/mytory-markdown-for-dropbox/assets/screenshot-1.jpg)
+[missing image]
 
 ### 2. File list of Dropbox.
-![File list of Dropbox.](https://ps.w.org/mytory-markdown-for-dropbox/assets/screenshot-2.jpg)
+[missing image]
 
 ### 3. Update on view page.
-![Update on view page.](https://ps.w.org/mytory-markdown-for-dropbox/assets/screenshot-3.jpg)
+[missing image]
 
 ### 4. Select your favorite Markdown Engine.
-![Select your favorite Markdown Engine.](https://ps.w.org/mytory-markdown-for-dropbox/assets/screenshot-4.jpg)
+[missing image]
 
 
 
